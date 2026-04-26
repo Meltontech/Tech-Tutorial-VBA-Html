@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meltontech | Responsive Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            scroll-behavior: smooth; 
+            background: linear-gradient(-45deg, #e0f2fe, #bae6fd, #7dd3fc, #38bdf8);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <nav class="fixed w-full bg-white/60 backdrop-blur-lg z-50 shadow-sm border-b border-blue-100">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-700">Melton Hussin</h1>
+            <div class="space-x-6 hidden md:block">
+                <a href="#home" class="font-medium hover:text-blue-600 transition">Home</a>
+                <a href="#projects" class="font-medium hover:text-blue-600 transition">Projects</a>
+                <a href="#contact" class="font-medium hover:text-blue-600 transition">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="pt-40 pb-24 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="w-32 h-32 glass-card rounded-full mx-auto mb-8 flex items-center justify-center shadow-lg floating">
+                <i class="fas fa-laptop-code text-4xl text-blue-600"></i>
+            </div>
+            <h2 class="text-6xl font-black mb-6 tracking-tight text-blue-900">Melton Hussin</h2>
+            <p class="text-xl text-blue-800/80 max-w-2xl mx-auto mb-10 leading-relaxed">
+            I'm Melton, a skilled and
+            creative web developer with a passion for creating beautiful,
+            responsive, and user-friendly websites. I've worked on a variety of
+            web projects, ranging from personal blogs to School Managment System.
+            </p>
+        </div>
+    </section>
+
+    <section id="projects" class="py-24 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h3 class="text-4xl font-bold mb-16 text-center text-blue-900">Featured Solutions</h3>
+            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="glass-card p-10 rounded-3xl shadow-2xl border border-white">
+                <h3 class="text-4xl font-bold mb-8 text-blue-900">Let's Connect</h3>
+                <form id="emailForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" id="name" placeholder="Your Name" class="w-full p-4 bg-white/50 border border-blue-100 rounded-xl focus:ring-4 focus:ring-blue-400 outline-none transition" required>
+                        <input type="email" id="email" placeholder="Your Email" class="w-full p-4 bg-white/50 border border-blue-100 rounded-xl focus:ring-4 focus:ring-blue-400 outline-none transition" required>
+                    </div>
+                    <textarea id="message" placeholder="Describe your project requirements..." rows="5" class="w-full p-4 bg-white/50 border border-blue-100 rounded-xl focus:ring-4 focus:ring-blue-400 outline-none transition" required></textarea>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl hover:bg-blue-700 transition-all transform hover:scale-[1.02]">
+                        Send Message via Gmail
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 text-center">
+        <p class="text-blue-900/60 font-medium">&copy; 2026 s.jaman8@gmail.com 01823007492.</p>
+    </footer>
+
+    <script>
+        // Project Data
+        const projects = [
+            {
+                title: "Employee Management System",
+                desc: "Full EMS featuring attendance tracking, salary sections, and reporting.",
+                tags: ["HTML", "Logic"],
+                icon: "fa-users-cog"
+            },
+            {
+                title: "Digital Print & PVC Tool",
+                desc: "Custom generator for PVC cards and Gold Purity Certificates.",
+                tags: ["Design", "Print"],
+                icon: "fa-id-card"
+            },
+            {
+                title: "Member Financial History",
+                desc: "Co-op system prototype with date-to-date financial record keeping.",
+                tags: ["Systems", "Finance"],
+                icon: "fa-history"
+            },
+            {
+                title: "Parking Layout Visualizer",
+                desc: "Multi-floor layout management for complex space coordination.",
+                tags: ["UX", "Management"],
+                icon: "fa-parking"
+            }
+        ];
+
+        const projectGrid = document.getElementById('project-grid');
+        projects.forEach(project => {
+            const card = `
+                <div class="glass-card group p-8 rounded-3xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white">
+                    <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg transform group-hover:rotate-12 transition-transform">
+                        <i class="fas ${project.icon} text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 text-blue-900">${project.title}</h4>
+                    <p class="text-blue-800/70 mb-6 leading-relaxed text-sm">${project.desc}</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${project.tags.map(tag => `<span class="bg-blue-100/50 px-4 py-1.5 rounded-lg text-xs font-bold text-blue-700 uppercase tracking-wider">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            projectGrid.innerHTML += card;
+        });
+
+        // FORM LOGIC: Opens Gmail/Email App with filled details
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            const recipient = "s.jaman8@gmail.com";
+            const subject = encodeURIComponent("Project Inquiry from " + name);
+            const body = encodeURIComponent("Client Name: " + name + "\nClient Email: " + email + "\n\nMessage:\n" + message);
+            
+            // This command triggers the automatic Gmail opening
+            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+        });
+    </script>
+</body>
+</html>
