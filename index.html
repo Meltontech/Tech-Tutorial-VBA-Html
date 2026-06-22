@@ -19,16 +19,21 @@
             .no-print { display: none !important; }
             html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; min-height: auto !important; }
             
+            /* Hide all main pages when printing */
+            body[class*="print-"] #authPage, 
+            body[class*="print-"] #profilePage { 
+                display: none !important; 
+            }
+            
+            /* Receipt Print Setup */
             body.print-receipt #receiptView { 
                 display: block !important; 
                 width: 80mm !important; 
                 margin: 0 auto !important; 
                 padding: 5mm !important;
             }
-            body.print-receipt #profilePage, body.print-receipt #authPage, body.print-receipt #a4ReportView, body.print-receipt #a4ExpenseReportView, body.print-receipt #a4BankReportView { 
-                display: none !important; 
-            }
             
+            /* A4 Sales Report Setup */
             body.print-a4 #a4ReportView { 
                 display: block !important; 
                 width: 100% !important; 
@@ -36,6 +41,8 @@
                 margin: 0 auto !important; 
                 padding: 10mm !important;
             }
+            
+            /* A4 Expense Report Setup */
             body.print-a4-expense #a4ExpenseReportView { 
                 display: block !important; 
                 width: 100% !important; 
@@ -43,17 +50,14 @@
                 margin: 0 auto !important; 
                 padding: 10mm !important;
             }
+            
+            /* A4 Bank Report Setup */
             body.print-a4-bank #a4BankReportView { 
                 display: block !important; 
                 width: 100% !important; 
                 max-width: 210mm !important; 
                 margin: 0 auto !important; 
                 padding: 10mm !important;
-            }
-            body.print-a4 #profilePage, body.print-a4 #authPage, body.print-a4 #receiptView, body.print-a4-expense #a4ExpenseReportView, body.print-a4-bank #a4BankReportView,
-            body.print-a4-expense #profilePage, body.print-a4-expense #authPage, body.print-a4-expense #receiptView, body.print-a4 #a4ReportView, body.print-a4-bank #a4BankReportView,
-            body.print-a4-bank #profilePage, body.print-a4-bank #authPage, body.print-a4-bank #receiptView, body.print-a4-bank #a4ReportView, body.print-a4-expense #a4ExpenseReportView { 
-                display: none !important; 
             }
         }
     </style>
@@ -66,7 +70,7 @@
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">লগইন প্যানেল</h2>
                 </div>
-                <input type="tel" id="loginMobile" placeholder="মোবাইল নাম্বার" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
+                <input type="text" id="loginMobile" placeholder="ইউজারনেম (Admin)" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
                 <input type="password" id="loginPass" placeholder="পাসওয়ার্ড" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
                 <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition shadow-lg">প্রবেশ করুন</button>
             </form>
@@ -345,7 +349,7 @@
                             <input type="number" id="expAmount" placeholder="টাকা লিখুন" class="w-full p-2 border rounded-lg bg-white text-xs md:text-sm">
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-gray-500">پেমেন্ট মাধ্যম</label>
+                            <label class="text-[10px] font-bold text-gray-500">পেমেন্ট মাধ্যম</label>
                             <select id="expSource" class="w-full p-2 border rounded-lg bg-white text-xs md:text-sm outline-none">
                                 <option value="Cash">ক্যাশ তহবিল (Cash)</option>
                                 <option value="Bank">ব্যাংক অ্যাকাউন্ট (Bank - Auto Debit)</option>
@@ -505,7 +509,7 @@
 
     <div id="a4ReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">েহরাব হুসসাইনট</h1>
+            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেহরাব হুসসাইন</h1>
             <h2 style="margin: 0; font-size: 18px;">বিক্রয় বিবরণী রিপোর্ট</h2>
         </div>
         <table style="width: 100%; border-collapse: collapse; font-size: 13px;" border="1" cellpadding="6">
@@ -520,7 +524,7 @@
 
     <div id="a4ExpenseReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">েহরাব হুসসাইন</h1>
+            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেহরাব হুসসাইন</h1>
             <h2 style="margin: 0; font-size: 18px;">খরচ বিবরণী রিপোর্ট (দিন ভিত্তিক)</h2>
             <p id="expenseReportPeriod" style="font-size: 12px; margin: 5px 0 0 0; color: #444;"></p>
         </div>
@@ -536,7 +540,7 @@
 
     <div id="a4BankReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">েহরাব হুসসাইন</h1>
+            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেহরাব হুসসাইন</h1>
             <h2 style="margin: 0; font-size: 18px;">ডিজিটাল ব্যাংক লেজার বুক রিপোর্ট</h2>
             <p id="bankReportPeriod" style="font-size: 12px; margin: 5px 0 0 0; color: #444;"></p>
         </div>
@@ -595,9 +599,7 @@
             return new Date();
         }
 
-        // --- মূল রিফ্রেশ UI ও ক্যালকুলেশন ফাংশন ---
         function refreshUI() {
-            // ডাটা লোকাল স্টোরেজে সেভ করা হচ্ছে
             localStorage.setItem('habib_inv', JSON.stringify(products));
             localStorage.setItem('habib_sales_history', JSON.stringify(salesHistory));
             localStorage.setItem('habib_expenses', JSON.stringify(expenses));
@@ -651,7 +653,6 @@
 
                 let totalExpenseValue = expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
                 
-                // নেট ব্যালেন্স ফিক্সড ক্যালকুলেশন
                 let totalBankCredit = bankTransactions.reduce((sum, tx) => tx.type === 'credit' ? sum + Number(tx.amount) : sum, 0);
                 let manualBankDebit = bankTransactions.reduce((sum, tx) => tx.type === 'debit' ? sum + Number(tx.amount) : sum, 0);
                 let autoExpenseBankDebit = expenses.reduce((sum, e) => e.source === 'Bank' ? sum + Number(e.amount) : sum, 0);
@@ -915,7 +916,6 @@
             }, 250);
         }
 
-        // --- ব্যাংক লেজার বুক ফাংশনসমূহ (সংশোধিত ও ফিক্সড) ---
         function saveBankTransaction() {
             const type = document.getElementById('bankTxType').value; 
             let note = document.getElementById('bankTxNote').value.trim(); 
@@ -942,7 +942,6 @@
             document.getElementById('bankTxNote').value = ''; 
             document.getElementById('bankTxAmount').value = ''; 
             
-            // ডাটা রিয়েলটাইমে সেভ এবং রেন্ডার করার জন্য refreshUI() কল করা হলো
             refreshUI(); 
             clearBankFilter();
         }
@@ -950,7 +949,6 @@
         function buildCurrentBankLedger() {
             let combinedLedger = [];
             
-            // ১. ম্যানুয়াল এন্ট্রি যুক্ত করা হচ্ছে
             bankTransactions.forEach((tx, idx) => {
                 combinedLedger.push({
                     ...tx,
@@ -959,7 +957,6 @@
                 });
             });
 
-            // ২. ব্যাংক ভিত্তিক খরচ গুলো অটো-ডেবিট হিসেবে যুক্ত করা হচ্ছে
             expenses.forEach((e) => {
                 if(e.source === 'Bank') {
                     combinedLedger.push({
@@ -973,7 +970,6 @@
                 }
             });
 
-            // তারিখ ক্রমানুসারে সর্টিং করা (নতুন লেনদেন উপরে থাকবে)
             combinedLedger.sort((a, b) => b.timestamp - a.timestamp);
 
             const from = document.getElementById('bankFilterFrom').value;
@@ -1083,7 +1079,6 @@
             }, 250);
         }
 
-        // --- গ্রাফ ও চার্ট ফাংশন ---
         function updateCharts() {
             const canvasTime = document.getElementById('expenseTimeChart');
             const canvasCat = document.getElementById('expenseCategoryChart');
@@ -1133,7 +1128,21 @@
                 }, 500);
             }, 250);
         }
-        function handleLogin(e) { e.preventDefault(); localStorage.setItem('habib_login_session', 'true'); showDashboard(); }
+
+        // Updated Login validation checking for "Admin" and "12345"
+        function handleLogin(e) { 
+            e.preventDefault(); 
+            const user = document.getElementById('loginMobile').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            
+            if(user === "Admin" && pass === "12345") {
+                localStorage.setItem('habib_login_session', 'true'); 
+                showDashboard(); 
+            } else {
+                alert("ভুল ইউজার বা পাসওয়ার্ড! দয়া করে সঠিক তথ্য দিন।");
+            }
+        }
+        
         function logout() { localStorage.removeItem('habib_login_session'); location.reload(); }
     </script>
 </body>
