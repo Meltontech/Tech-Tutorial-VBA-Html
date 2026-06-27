@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
@@ -19,21 +19,16 @@
             .no-print { display: none !important; }
             html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; min-height: auto !important; }
             
-            /* Hide all main pages when printing */
-            body[class*="print-"] #authPage, 
-            body[class*="print-"] #profilePage { 
-                display: none !important; 
-            }
-            
-            /* Receipt Print Setup */
             body.print-receipt #receiptView { 
                 display: block !important; 
                 width: 80mm !important; 
                 margin: 0 auto !important; 
                 padding: 5mm !important;
             }
+            body.print-receipt #profilePage, body.print-receipt #authPage, body.print-receipt #a4ReportView, body.print-receipt #a4ExpenseReportView, body.print-receipt #a4BankReportView { 
+                display: none !important; 
+            }
             
-            /* A4 Sales Report Setup */
             body.print-a4 #a4ReportView { 
                 display: block !important; 
                 width: 100% !important; 
@@ -41,8 +36,6 @@
                 margin: 0 auto !important; 
                 padding: 10mm !important;
             }
-            
-            /* A4 Expense Report Setup */
             body.print-a4-expense #a4ExpenseReportView { 
                 display: block !important; 
                 width: 100% !important; 
@@ -50,14 +43,17 @@
                 margin: 0 auto !important; 
                 padding: 10mm !important;
             }
-            
-            /* A4 Bank Report Setup */
             body.print-a4-bank #a4BankReportView { 
                 display: block !important; 
                 width: 100% !important; 
                 max-width: 210mm !important; 
                 margin: 0 auto !important; 
                 padding: 10mm !important;
+            }
+            body.print-a4 #profilePage, body.print-a4 #authPage, body.print-a4 #receiptView, body.print-a4-expense #a4ExpenseReportView, body.print-a4-bank #a4BankReportView,
+            body.print-a4-expense #profilePage, body.print-a4-expense #authPage, body.print-a4-expense #receiptView, body.print-a4 #a4ReportView, body.print-a4-bank #a4BankReportView,
+            body.print-a4-bank #profilePage, body.print-a4-bank #authPage, body.print-a4-bank #receiptView, body.print-a4-bank #a4ReportView, body.print-a4-expense #a4ExpenseReportView { 
+                display: none !important; 
             }
         }
     </style>
@@ -70,7 +66,7 @@
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">লগইন প্যানেল</h2>
                 </div>
-                <input type="text" id="loginMobile" placeholder="নাম" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
+                <input type="text" id="loginMobile" placeholder="ইউজারনেম (Admin)" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
                 <input type="password" id="loginPass" placeholder="পাসওয়ার্ড" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
                 <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition shadow-lg">প্রবেশ করুন</button>
             </form>
@@ -81,7 +77,7 @@
         <div class="max-w-7xl mx-auto bg-white w-full min-h-screen flex flex-col shadow-2xl rounded-none md:my-4 md:rounded-2xl overflow-hidden">
             
             <div class="p-4 md:p-6 bg-slate-800 text-white no-print flex justify-between items-center shadow-md">
-                <h1 class="text-lg md:text-2xl font-bold tracking-wide">DEV <span class="text-blue-400">01823007492</span></h1>
+                <h1 class="text-lg md:text-2xl font-bold tracking-wide">DEV <span class="text-blue-400">018253007492</span></h1>
                 <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold shadow transition">লগ আউট</button>
             </div>
 
@@ -116,7 +112,7 @@
                         <h3 id="statExpense" class="text-sm md:text-lg font-bold text-gray-800 mt-1">৳ ০</h3>
                     </div>
                     <div class="bg-purple-50 p-4 rounded-xl border-l-4 border-purple-500 shadow-sm col-span-2 lg:col-span-1">
-                        <p class="text-[10px] md:text-xs font-bold text-purple-600 uppercase">ব্যাংক ব্যালেন্স</p>
+                        <p class="text-[10px] md:text-xs font-bold text-purple-600 uppercase">ব্যাংক/ক্যাশ ব্যালেন্স</p>
                         <h3 id="statBankBalance" class="text-sm md:text-lg font-bold text-gray-800 mt-1">৳ ০</h3>
                     </div>
                 </div>
@@ -218,7 +214,7 @@
                         </div>
                     </div>
                     <div class="lg:col-span-2">
-                        <p class="text-sm font-bold mb-2 text-gray-500">সরাসরি স্টক আপডেট করতে বামের ফর্মটি ব্যবহার করুন। তালিকাটি ইনভেন্টরি ট্যাবেও পাওয়া যাবে।</p>
+                        <p class="text-sm font-bold mb-2 text-gray-500">সরাসরি স্টক আপডেট করতে বামের ফর্মটি ব্যবহার করুন। তালিকাটি ইনভেন্টরি ট্যাবেও পাওয়া যাবে.</p>
                     </div>
                 </div>
             </div>
@@ -408,7 +404,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-4 bg-gray-50 p-4 md:p-5 rounded-2xl border border-gray-200 h-fit space-y-3">
-                        <h4 class="font-bold text-gray-700 text-sm" id="bankFormHeader">নতুন ব্যাংক এন্ট্রি</h4>
+                        <h4 class="font-bold text-gray-700 text-sm" id="bankFormHeader">নতুন ব্যাংক/ক্যাশ এন্ট্রি</h4>
                         <input type="hidden" id="editBankIndex" value="-1">
                         <div>
                             <label class="text-[10px] font-bold text-gray-500">লেনদেনের ধরণ</label>
@@ -431,7 +427,7 @@
 
                     <div class="lg:col-span-8 space-y-4">
                         <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 flex justify-between items-center shadow-sm">
-                            <span class="text-xs md:text-sm font-bold text-purple-900">নেট ব্যাংক ব্যালেন্স:</span>
+                            <span class="text-xs md:text-sm font-bold text-purple-900">নেট ব্যাংক/ক্যাশ ব্যালেন্স:</span>
                             <span id="ledgerBankBalance" class="text-base md:text-2xl font-black text-purple-700">৳ ০</span>
                         </div>
                         
@@ -481,8 +477,8 @@
 
     <div id="receiptView">
         <div style="text-align: center; border-bottom: 1px dashed #000; padding-bottom: 10px; margin-bottom: 10px;">
-            <h2 style="margin: 0; font-size: 16px; font-weight: bold;">মেহরাব হুসসাইন</h2>
-            <p style="margin: 5px 0; font-size: 12px;">বারীনগর বাজার, হাইস্কুল রোড, সদর, যশোর</p>
+            <h2 style="margin: 0; font-size: 16px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h2>
+            <p style="margin: 5px 0; font-size: 12px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর<br>মোবাইল: ০১৭১৪০৬৮৬৭৬</p>
         </div>
         <div style="font-size: 12px; margin-bottom: 10px;">
             <p style="margin: 3px 0;"><strong>তারিখ:</strong> <span id="recDate"></span></p>
@@ -509,7 +505,8 @@
 
     <div id="a4ReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেহরাব হুসসাইন</h1>
+            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h1>
+            <p style="margin: 0 0 10px 0; font-size: 14px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর | মোবাইল: ০১৭১৪০৬৮৬৭৬</p>
             <h2 style="margin: 0; font-size: 18px;">বিক্রয় বিবরণী রিপোর্ট</h2>
         </div>
         <table style="width: 100%; border-collapse: collapse; font-size: 13px;" border="1" cellpadding="6">
@@ -524,7 +521,8 @@
 
     <div id="a4ExpenseReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেহরাব হুসসাইন</h1>
+            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h1>
+            <p style="margin: 0 0 10px 0; font-size: 14px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর | মোবাইল: ০১৭১৪০৬৮৬৭৬</p>
             <h2 style="margin: 0; font-size: 18px;">খরচ বিবরণী রিপোর্ট (দিন ভিত্তিক)</h2>
             <p id="expenseReportPeriod" style="font-size: 12px; margin: 5px 0 0 0; color: #444;"></p>
         </div>
@@ -540,18 +538,28 @@
 
     <div id="a4BankReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেহরাব হুসসাইন</h1>
+            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h1>
+            <p style="margin: 0 0 10px 0; font-size: 14px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর | মোবাইল: ০১৭১৪০৬৮৬৭৬</p>
             <h2 style="margin: 0; font-size: 18px;">ডিজিটাল ব্যাংক লেজার বুক রিপোর্ট</h2>
             <p id="bankReportPeriod" style="font-size: 12px; margin: 5px 0 0 0; color: #444;"></p>
         </div>
         <table style="width: 100%; border-collapse: collapse; font-size: 13px;" border="1" cellpadding="6">
             <thead>
                 <tr style="background-color: #f3f4f6;">
-                    <th width="15%">তারিখ</th><th width="50%">বিবরণ / ইনভয়েস নাম্বার</th><th width="15%">লেনদেনের ধরণ</th><th width="20%" style="text-align: right;">টাকার পরিমাণ</th>
+                    <th width="15%">তারিখ</th>
+                    <th width="40%">বিবরণ / ইনভয়েস নাম্বার</th>
+                    <th width="15%" style="text-align: right;">জমা (Credit)</th>
+                    <th width="15%" style="text-align: right;">উত্তোলন/খরচ (Debit)</th>
+                    <th width="15%" style="text-align: right;">জের (Balance)</th>
                 </tr>
             </thead>
             <tbody id="a4BankReportRows"></tbody>
         </table>
+        
+        <div style="margin-top: 50px; display: flex; justify-content: space-between; padding: 0 30px;">
+            <div style="text-align: center; border-top: 1px solid #000; width: 150px; font-size: 12px; padding-top: 5px; font-weight: bold;">প্রস্তুতকারীর স্বাক্ষর</div>
+            <div style="text-align: center; border-top: 1px solid #000; width: 150px; font-size: 12px; padding-top: 5px; font-weight: bold;">কর্তৃপক্ষের স্বাক্ষর</div>
+        </div>
     </div>
 
     <script>
@@ -561,6 +569,7 @@
         let bankTransactions = JSON.parse(localStorage.getItem('habib_bank_tx')) || [];
         
         let currentCart = []; 
+        let backupEditItems = []; 
         let currentFilteredList = [...salesHistory]; 
         let currentFilteredExpenses = [...expenses];
         let currentFilteredBank = [];
@@ -619,6 +628,8 @@
                 let totalVal = 0, totalSales = 0, totalDue = 0;
 
                 products.forEach((p, index) => {
+                    if (p.isDeleted) return; 
+                    
                     totalVal += (p.qty * p.price);
                     invBody.innerHTML += `
                         <tr class="${p.qty < 5 ? 'bg-red-50' : ''}">
@@ -633,7 +644,7 @@
                     selector.innerHTML += `<option value="${index}">${p.name} (স্টক: ${p.qty})</option>`;
 
                     if (p.qty <= 5) {
-                        lowStockItemsHtml += `<li>${p.name} (অবশিষ্ট: <span class="text-red-600 font-extrabold">${p.qty}</span> টি)</li>`;
+                        lowStockItemsHtml += `<li>${p.name} (অবशिष्ट: <span class="text-red-600 font-extrabold">${p.qty}</span> টি)</li>`;
                     }
                 });
 
@@ -656,6 +667,8 @@
                 let totalBankCredit = bankTransactions.reduce((sum, tx) => tx.type === 'credit' ? sum + Number(tx.amount) : sum, 0);
                 let manualBankDebit = bankTransactions.reduce((sum, tx) => tx.type === 'debit' ? sum + Number(tx.amount) : sum, 0);
                 let autoExpenseBankDebit = expenses.reduce((sum, e) => e.source === 'Bank' ? sum + Number(e.amount) : sum, 0);
+                
+                // Removed auto-sales from bank balance calculation
                 let currentBankBalance = totalBankCredit - (manualBankDebit + autoExpenseBankDebit);
 
                 document.getElementById('statValue').innerText = "৳ " + totalVal;
@@ -683,8 +696,8 @@
             const price = Number(document.getElementById('pPrice').value);
             const editIndex = document.getElementById('editIndex').value;
             if(!name || qty < 0 || price < 0) return alert("সঠিক তথ্য দিন");
-            if(editIndex == "-1") products.push({name, qty, price});
-            else { products[editIndex] = {name, qty, price}; cancelProductEdit(); }
+            if(editIndex == "-1") products.push({name, qty, price, isDeleted: false});
+            else { products[editIndex].name = name; products[editIndex].qty = qty; products[editIndex].price = price; cancelProductEdit(); }
             document.getElementById('pName').value = ''; document.getElementById('pQty').value = ''; document.getElementById('pPrice').value = '';
             refreshUI(); switchTab('inventory');
         }
@@ -702,8 +715,14 @@
             document.getElementById('stockFormHeader').innerText = "➕ নতুন পণ্য স্টক ইন";
             document.getElementById('saveBtn').innerText = "সেভ করুন";
             document.getElementById('cancelProdEditBtn').classList.add('hidden');
+            document.getElementById('pName').value = ''; document.getElementById('pQty').value = ''; document.getElementById('pPrice').value = '';
         }
-        function deleteProduct(i) { if(confirm("পণ্যটি সম্পূর্ণ মুছে ফেলবেন?")) { products.splice(i, 1); refreshUI(); } }
+        function deleteProduct(i) { 
+            if(confirm("পণ্যটি সম্পূর্ণ মুছে ফেলবেন?")) { 
+                products[i].isDeleted = true; 
+                refreshUI(); 
+            } 
+        }
 
         function autoFillPrice() {
             const index = document.getElementById('saleSelect').value;
@@ -735,27 +754,29 @@
             const mob = document.getElementById('customerMobile').value.trim(); const subTotal = Number(document.getElementById('saleSubTotal').value) || 0; const discount = Number(document.getElementById('saleDiscount').value) || 0; const netTotal = Number(document.getElementById('saleNetTotal').value) || 0; const paid = Number(document.getElementById('salePaid').value) || 0; const dueAmt = Number(document.getElementById('saleDue').value) || 0; const editIndex = document.getElementById('editSaleIndex').value;
             if(!mob || currentCart.length === 0) return alert("মোবাইল ও কার্ট ফিল্ড খালি");
             
-            if(editIndex == "-1") {
-                currentCart.forEach(item => {
-                    let pIndex = item.productIndex;
-                    if(products[pIndex]) {
-                        products[pIndex].qty -= item.qty;
-                        if(products[pIndex].qty < 0) products[pIndex].qty = 0; 
-                    }
-                });
-            }
+            currentCart.forEach(item => {
+                let pIndex = item.productIndex;
+                if(products[pIndex]) {
+                    products[pIndex].qty -= item.qty;
+                    if(products[pIndex].qty < 0) products[pIndex].qty = 0; 
+                }
+            });
 
             const now = new Date();
             const saleData = { mobile: mob, items: [...currentCart], subTotal, discount, netTotal, paid, due: dueAmt, displayDate: now.toLocaleString('bn-BD'), date: now.toISOString().split('T')[0], timestamp: now.getTime() };
+            
             if(editIndex == "-1") salesHistory.push(saleData);
             else { salesHistory[editIndex] = saleData; cancelSaleEdit(); }
-            currentCart = []; updateCartUI(); refreshUI(); document.getElementById('customerMobile').value = ''; switchTab('history');
+            
+            currentCart = []; backupEditItems = []; updateCartUI(); refreshUI(); document.getElementById('customerMobile').value = ''; switchTab('history');
         }
         
         function renderSalesTable(data) {
             const body = document.getElementById('salesHistoryBody'); if(!body) return; body.innerHTML = '';
             data.forEach((s, i) => {
                 let itemsText = s.items.map(it => `${it.name} (${it.qty}টি)`).join(', ');
+                let originalIndex = salesHistory.findIndex(sh => sh.timestamp === s.timestamp);
+                
                 body.innerHTML += `
                     <tr>
                         <td class="p-3 text-xs font-bold">${s.mobile}<br><span class="text-gray-400 font-normal">${s.date}</span></td>
@@ -763,26 +784,60 @@
                         <td class="p-3 font-bold text-xs">৳${s.netTotal}</td>
                         <td class="p-3 text-red-600 font-bold text-xs">৳${s.due}</td>
                         <td class="p-3 text-center flex flex-col md:flex-row justify-center items-center gap-1">
-                            <button onclick="printReceiptDirectly(${i})" class="bg-blue-600 text-white p-1 rounded text-[10px] w-full md:w-auto"><i class="fas fa-print"></i></button>
-                            <button onclick="editSale(${i})" class="bg-yellow-500 text-white p-1 rounded text-[10px] w-full md:w-auto"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteSale(${i})" class="bg-red-500 text-white p-1 rounded text-[10px] w-full md:w-auto"><i class="fas fa-trash"></i></button>
+                            <button onclick="printReceiptDirectly(${originalIndex})" class="bg-blue-600 text-white p-1 rounded text-[10px] w-full md:w-auto"><i class="fas fa-print"></i></button>
+                            <button onclick="editSale(${originalIndex})" class="bg-yellow-500 text-white p-1 rounded text-[10px] w-full md:w-auto"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteSale(${originalIndex})" class="bg-red-500 text-white p-1 rounded text-[10px] w-full md:w-auto"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>`;
             });
         }
+
         function editSale(i) {
-            const s = salesHistory[i]; document.getElementById('editSaleIndex').value = i; document.getElementById('customerMobile').value = s.mobile; document.getElementById('saleDiscount').value = s.discount; document.getElementById('salePaid').value = s.paid;
-            currentCart = [...s.items]; updateCartUI();
+            const s = salesHistory[i]; 
+            document.getElementById('editSaleIndex').value = i; 
+            document.getElementById('customerMobile').value = s.mobile; 
+            document.getElementById('saleDiscount').value = s.discount; 
+            document.getElementById('salePaid').value = s.paid;
+            
+            currentCart = JSON.parse(JSON.stringify(s.items));
+            backupEditItems = JSON.parse(JSON.stringify(s.items));
+            
+            backupEditItems.forEach(item => {
+                if(products[item.productIndex]) products[item.productIndex].qty += item.qty;
+            });
+            refreshUI();
+
+            updateCartUI();
             document.getElementById('saleFormTitle').innerText = "📝 বিক্রয় সম্পাদনা মোড";
             document.getElementById('saleSubmitBtn').innerText = "আপডেট ও সেভ";
             document.getElementById('saleCancelBtn').classList.remove('hidden');
             switchTab('home');
         }
+
         function cancelSaleEdit() {
-            document.getElementById('editSaleIndex').value = "-1"; currentCart = []; updateCartUI(); document.getElementById('customerMobile').value = '';
+            const i = document.getElementById('editSaleIndex').value;
+            if(i !== "-1" && backupEditItems.length > 0) {
+                backupEditItems.forEach(item => {
+                    if(products[item.productIndex]) products[item.productIndex].qty -= item.qty;
+                });
+                refreshUI();
+            }
+
+            document.getElementById('editSaleIndex').value = "-1"; currentCart = []; backupEditItems = []; updateCartUI(); document.getElementById('customerMobile').value = '';
             document.getElementById('saleFormTitle').innerText = "🛒 নতুন বিক্রয় প্যানেল"; document.getElementById('saleSubmitBtn').innerText = "নিশ্চিত করুন ও প্রিন্ট"; document.getElementById('saleCancelBtn').classList.add('hidden');
         }
-        function deleteSale(i) { if(confirm("এই বিক্রয় রেকর্ডটি ডিলিট করতে চান?")) { salesHistory.splice(i, 1); refreshUI(); } }
+
+        function deleteSale(i) { 
+            if(confirm("এই বিক্রয় রেকর্ডটি ডিলিট করতে চান?")) { 
+                salesHistory[i].items.forEach(item => {
+                    if(products[item.productIndex]) {
+                        products[item.productIndex].qty += item.qty;
+                    }
+                });
+                salesHistory.splice(i, 1); 
+                refreshUI(); 
+            } 
+        }
         
         function printReceiptDirectly(index) {
             const s = salesHistory[index]; 
@@ -855,6 +910,7 @@
         }
         function cancelExpenseEdit() {
             document.getElementById('editExpenseIndex').value = "-1"; document.getElementById('expenseFormHeader').innerText = "নতুন খরচ বিবরণী"; document.getElementById('expenseSubmitBtn').innerText = "খরচ সেভ করুন"; document.getElementById('expenseCancelBtn').classList.add('hidden');
+            document.getElementById('expTitle').value = ''; document.getElementById('expAmount').value = '';
         }
         function deleteExpense(i) { if(confirm("খরচ বিবরণীটি মুছে ফেলবেন?")) { expenses.splice(i, 1); refreshUI(); } }
 
@@ -893,26 +949,27 @@
             const to = document.getElementById('expenseFilterTo').value;
             document.getElementById('expenseReportPeriod').innerText = (from || to) ? `সময়কাল: ${from || 'শুরু'} হতে ${to || 'আজ'}` : "সকল সমযের রিপোর্ট";
 
+            let totalExpAmount = 0;
             currentFilteredExpenses.forEach(e => {
-                rRows.innerHTML += `<tr>
-                    <td>${e.date}</td>
-                    <td class="font-bold">${e.category}</td>
-                    <td>${e.title} (${e.source === 'Bank' ? 'ব্যাংক অটো ডেবিট' : 'ক্যাশ তহবিল'})</td>
-                    <td align="right" class="font-bold">৳${e.amount}</td>
-                </tr>`;
+                totalExpAmount += Number(e.amount);
+                rRows.innerHTML += `
+                    <tr>
+                        <td>${e.date}</td>
+                        <td>${e.category}</td>
+                        <td>${e.title} (${e.source})</td>
+                        <td align="right">৳${e.amount}</td>
+                    </tr>`;
             });
-
-            let total = currentFilteredExpenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
-            rRows.innerHTML += `<tr style="background-color: #f9fafb; font-weight: bold;">
-                <td colspan="3" align="right">সর্বমোট খরচ:</td>
-                <td align="right" style="color: red;">৳${total}</td>
-            </tr>`;
-
+            
+            rRows.innerHTML += `
+                <tr style="background-color: #f9fafb; font-weight: bold; border-top: 2px solid #000;">
+                    <td colspan="3" align="right">মোট খরচ (এই সময়কালের):</td>
+                    <td align="right" style="color: red;">৳${totalExpAmount}</td>
+                </tr>`;
+            
             setTimeout(() => {
                 window.print();
-                setTimeout(() => {
-                    document.body.className = "bg-gray-100 font-sans antialiased text-gray-800";
-                }, 500);
+                setTimeout(() => { document.body.className = "bg-gray-100 font-sans antialiased text-gray-800"; }, 500);
             }, 250);
         }
 
@@ -950,11 +1007,7 @@
             let combinedLedger = [];
             
             bankTransactions.forEach((tx, idx) => {
-                combinedLedger.push({
-                    ...tx,
-                    originType: 'manual',
-                    originalIndex: idx
-                });
+                combinedLedger.push({...tx, originType: 'manual', originalIndex: idx});
             });
 
             expenses.forEach((e) => {
@@ -970,7 +1023,9 @@
                 }
             });
 
-            combinedLedger.sort((a, b) => b.timestamp - a.timestamp);
+            // Removed the Auto Sales import completely
+
+            combinedLedger.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
             const from = document.getElementById('bankFilterFrom').value;
             const to = document.getElementById('bankFilterTo').value;
@@ -1001,8 +1056,8 @@
                         <button onclick="editBankTx(${tx.originalIndex})" class="text-blue-500 text-xs"><i class="fas fa-edit"></i></button>
                         <button onclick="deleteBankTx(${tx.originalIndex})" class="text-red-500 text-xs"><i class="fas fa-trash"></i></button>
                     `;
-                } else {
-                    actionButtons = `<span class="text-gray-400 text-[10px] italic">Auto Expense</span>`;
+                } else if (tx.originType === 'auto-expense') {
+                    actionButtons = `<span class="text-gray-400 text-[10px] italic">অটো খরচ</span>`;
                 }
 
                 body.innerHTML += `
@@ -1021,7 +1076,8 @@
             document.getElementById('bankFormHeader').innerText = "📝 ব্যাংক লেজার এডিট"; document.getElementById('bankSubmitBtn').innerText = "আপডেট ট্রানজেকশন"; document.getElementById('bankCancelBtn').classList.remove('hidden');
         }
         function cancelBankEdit() {
-            document.getElementById('editBankIndex').value = "-1"; document.getElementById('bankFormHeader').innerText = "নতুন ব্যাংক এন্ট্রি"; document.getElementById('bankSubmitBtn').innerText = "লেজারে আপডেট করুন"; document.getElementById('bankCancelBtn').classList.add('hidden');
+            document.getElementById('editBankIndex').value = "-1"; document.getElementById('bankFormHeader').innerText = "নতুন ব্যাংক/ক্যাশ এন্ট্রি"; document.getElementById('bankSubmitBtn').innerText = "লেজারে আপডেট করুন"; document.getElementById('bankCancelBtn').classList.add('hidden');
+            document.getElementById('bankTxNote').value = ''; document.getElementById('bankTxAmount').value = '';
         }
         function deleteBankTx(i) { if(confirm("এই ব্যাংক ডাটা মুছে ফেলবেন?")) { bankTransactions.splice(i, 1); refreshUI(); } }
 
@@ -1042,32 +1098,99 @@
             const to = document.getElementById('bankFilterTo').value;
             document.getElementById('bankReportPeriod').innerText = (from || to) ? `সময়কাল: ${from || 'শুরু'} হতে ${to || 'আজ'}` : "সকল সমযের রিপোর্ট";
 
-            currentFilteredBank.forEach(tx => {
-                let typeText = tx.type === 'credit' ? 'টাকা জমা (+)' : 'টাকা উত্তোলন/খরচ (-)';
-                let typeColor = tx.type === 'credit' ? 'green' : 'red';
+            let fullLedger = [];
+            bankTransactions.forEach((tx, idx) => {
+                fullLedger.push({...tx, originType: 'manual', originalIndex: idx});
+            });
+            expenses.forEach((e) => {
+                if(e.source === 'Bank') {
+                    fullLedger.push({
+                        date: e.date,
+                        timestamp: e.timestamp,
+                        note: `অটো ডেবিট (খরচ: ${e.category} - ${e.title})`,
+                        type: 'debit',
+                        amount: e.amount,
+                        originType: 'auto-expense'
+                    });
+                }
+            });
+            
+            // Removed Auto-sales from Print Report completely
+
+            fullLedger.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+            let runningBalance = 0;
+            let openingBalance = 0;
+            let hasFilterFrom = !!from;
+            let fDateFrom = from ? new Date(from) : null;
+            if(fDateFrom) fDateFrom.setHours(0,0,0,0);
+            let fDateTo = to ? new Date(to) : null;
+            if(fDateTo) fDateTo.setHours(23,59,59,999);
+
+            let printItems = [];
+            let totalCredit = 0;
+            let totalDebit = 0;
+
+            fullLedger.forEach(tx => {
+                let txDate = parseBanglaDateOrTimestamp(tx);
+                let amt = Number(tx.amount || 0);
+                
+                if (hasFilterFrom && txDate < fDateFrom) {
+                    if (tx.type === 'credit') openingBalance += amt;
+                    else openingBalance += -amt;
+                } else {
+                    if (fDateTo && txDate > fDateTo) return; 
+                    printItems.push(tx);
+                }
+            });
+
+            runningBalance = openingBalance;
+
+            if (hasFilterFrom) {
+                rRows.innerHTML += `
+                    <tr style="background-color: #f9fafb; font-weight: bold; font-style: italic;">
+                        <td>-</td>
+                        <td>প্রারম্ভিক স্থিতি (Opening Balance)</td>
+                        <td align="right">-</td>
+                        <td align="right">-</td>
+                        <td align="right">৳${openingBalance}</td>
+                    </tr>`;
+            }
+
+            printItems.forEach(tx => {
+                let amt = Number(tx.amount || 0);
+                let creditStr = '-';
+                let debitStr = '-';
+                
+                if (tx.type === 'credit') {
+                    runningBalance += amt;
+                    totalCredit += amt;
+                    creditStr = `৳${amt}`;
+                } else {
+                    runningBalance -= amt;
+                    totalDebit += amt;
+                    debitStr = `৳${amt}`;
+                }
+
                 rRows.innerHTML += `<tr>
                     <td>${tx.date}</td>
                     <td>${tx.note}</td>
-                    <td style="color: ${typeColor}; font-weight: bold;">${typeText}</td>
-                    <td align="right" class="font-bold" style="color: ${typeColor};">৳${tx.amount}</td>
+                    <td align="right" style="color: green; font-weight: 500;">${creditStr}</td>
+                    <td align="right" style="color: red; font-weight: 500;">${debitStr}</td>
+                    <td align="right" class="font-bold">৳${runningBalance}</td>
                 </tr>`;
             });
 
-            let totalCredit = currentFilteredBank.reduce((sum, tx) => tx.type === 'credit' ? sum + Number(tx.amount) : sum, 0);
-            let totalDebit = currentFilteredBank.reduce((sum, tx) => tx.type === 'debit' ? sum + Number(tx.amount) : sum, 0);
-
             rRows.innerHTML += `
-                <tr style="background-color: #f9fafb; font-weight: bold;">
-                    <td colspan="3" align="right">মোট ক্রেডিট (জমা):</td>
+                <tr style="background-color: #f9fafb; font-weight: bold; border-top: 2px solid #000;">
+                    <td colspan="2" align="right">মোট লেনদেন (এই সময়কালের):</td>
                     <td align="right" style="color: green;">৳${totalCredit}</td>
-                </tr>
-                <tr style="background-color: #f9fafb; font-weight: bold;">
-                    <td colspan="3" align="right">মোট ডেবিট (উত্তোলন/খরচ):</td>
                     <td align="right" style="color: red;">৳${totalDebit}</td>
+                    <td align="right" style="color: purple;">-</td>
                 </tr>
                 <tr style="background-color: #eef2f6; font-weight: bold; font-size:14px;">
-                    <td colspan="3" align="right">ফিল্টারড ব্যালেন্স পার্থক্য:</td>
-                    <td align="right" style="color: purple;">৳${totalCredit - totalDebit}</td>
+                    <td colspan="4" align="right">সমাপনী স্থিতি (Closing Balance):</td>
+                    <td align="right" style="color: blue;">৳${runningBalance}</td>
                 </tr>
             `;
 
@@ -1128,21 +1251,17 @@
                 }, 500);
             }, 250);
         }
-
-        // Updated Login validation checking for "Admin" and "12345"
         function handleLogin(e) { 
             e.preventDefault(); 
-            const user = document.getElementById('loginMobile').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-            
-            if(user === "Admin" && pass === "12345") {
+            const user = document.getElementById('loginMobile').value;
+            const pass = document.getElementById('loginPass').value;
+            if(user === 'Admin' && pass === '12345') {
                 localStorage.setItem('habib_login_session', 'true'); 
                 showDashboard(); 
             } else {
-                alert("ভুল ইউজার বা পাসওয়ার্ড! দয়া করে সঠিক তথ্য দিন।");
+                alert('ভুল ইউজারনেম বা পাসওয়ার্ড!');
             }
         }
-        
         function logout() { localStorage.removeItem('habib_login_session'); location.reload(); }
     </script>
 </body>
