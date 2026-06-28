@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
+<style>
         .page { display: none; }
         .active-page { display: flex; }
         .tab-content { display: none; }
@@ -19,14 +19,17 @@
             .no-print { display: none !important; }
             html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; min-height: auto !important; }
             
+            /* 1. First, hide all main views by default during print */
+            #authPage, #profilePage, #receiptView, #a4ReportView, #a4ExpenseReportView, #a4BankReportView {
+                display: none !important;
+            }
+
+            /* 2. Then, selectively SHOW only the requested view based on the body class */
             body.print-receipt #receiptView { 
                 display: block !important; 
                 width: 80mm !important; 
                 margin: 0 auto !important; 
                 padding: 5mm !important;
-            }
-            body.print-receipt #profilePage, body.print-receipt #authPage, body.print-receipt #a4ReportView, body.print-receipt #a4ExpenseReportView, body.print-receipt #a4BankReportView { 
-                display: none !important; 
             }
             
             body.print-a4 #a4ReportView { 
@@ -36,6 +39,7 @@
                 margin: 0 auto !important; 
                 padding: 10mm !important;
             }
+            
             body.print-a4-expense #a4ExpenseReportView { 
                 display: block !important; 
                 width: 100% !important; 
@@ -43,17 +47,13 @@
                 margin: 0 auto !important; 
                 padding: 10mm !important;
             }
+            
             body.print-a4-bank #a4BankReportView { 
                 display: block !important; 
                 width: 100% !important; 
                 max-width: 210mm !important; 
                 margin: 0 auto !important; 
                 padding: 10mm !important;
-            }
-            body.print-a4 #profilePage, body.print-a4 #authPage, body.print-a4 #receiptView, body.print-a4-expense #a4ExpenseReportView, body.print-a4-bank #a4BankReportView,
-            body.print-a4-expense #profilePage, body.print-a4-expense #authPage, body.print-a4-expense #receiptView, body.print-a4 #a4ReportView, body.print-a4-bank #a4BankReportView,
-            body.print-a4-bank #profilePage, body.print-a4-bank #authPage, body.print-a4-bank #receiptView, body.print-a4-bank #a4ReportView, body.print-a4-expense #a4ExpenseReportView { 
-                display: none !important; 
             }
         }
     </style>
@@ -66,8 +66,8 @@
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">লগইন প্যানেল</h2>
                 </div>
-                <input type="text" id="loginMobile" placeholder="User Name" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
-                <input type="password" id="loginPass" placeholder="Password" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
+                <input type="text" id="loginMobile" placeholder="ইউজারনেম (Admin)" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
+                <input type="password" id="loginPass" placeholder="পাসওয়ার্ড" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition" required>
                 <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition shadow-lg">প্রবেশ করুন</button>
             </form>
         </div>
@@ -77,7 +77,7 @@
         <div class="max-w-7xl mx-auto bg-white w-full min-h-screen flex flex-col shadow-2xl rounded-none md:my-4 md:rounded-2xl overflow-hidden">
             
             <div class="p-4 md:p-6 bg-slate-800 text-white no-print flex justify-between items-center shadow-md">
-                <h1 class="text-lg md:text-2xl font-bold tracking-wide">DEV <span class="text-blue-400">018253007492</span></h1>
+                <h1 class="text-lg md:text-2xl font-bold tracking-wide">POS <span class="text-blue-400">System</span></h1>
                 <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold shadow transition">লগ আউট</button>
             </div>
 
@@ -134,7 +134,7 @@
                     <div class="lg:col-span-5 bg-blue-50 p-4 md:p-5 rounded-2xl border border-blue-200 h-fit space-y-4">
                         <h3 class="font-bold text-blue-700" id="saleFormTitle"><i class="fas fa-shopping-cart mr-2"></i> নতুন বিক্রয় প্যানেল</h3>
                         <input type="hidden" id="editSaleIndex" value="-1">
-                        <input type="tel" id="customerMobile" placeholder="কাস্টমার মোবাইল নাম্বার" class="w-full p-2.5 border rounded-lg bg-white outline-none">
+                        <input type="tel" id="customerMobile" placeholder="কাস্টমার মোবাইল নাম্বার / নাম" class="w-full p-2.5 border rounded-lg bg-white outline-none">
                         
                         <div class="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
                             <label class="text-xs font-bold text-gray-500 block">পণ্য কার্টে যোগ করুন:</label>
@@ -249,8 +249,8 @@
                             <input type="date" id="filterTo" class="w-full p-2 border rounded-lg text-xs md:text-sm">
                         </div>
                         <div class="col-span-2 lg:col-span-1">
-                            <label class="text-[10px] font-bold text-gray-500 block mb-1">মোবাইল দিয়ে অনুসন্ধান</label>
-                            <input type="tel" id="searchCustomer" placeholder="কাস্টমার মোবাইল" class="w-full p-2 border rounded-lg text-xs md:text-sm">
+                            <label class="text-[10px] font-bold text-gray-500 block mb-1">অনুসন্ধান</label>
+                            <input type="tel" id="searchCustomer" placeholder="কাস্টমার মোবাইল বা ইনভয়েস" class="w-full p-2 border rounded-lg text-xs md:text-sm">
                         </div>
                     </div>
                     <div class="flex gap-2 justify-end">
@@ -271,7 +271,7 @@
                     <table class="w-full text-xs md:text-sm text-left">
                         <thead class="bg-slate-700 text-white">
                             <tr>
-                                <th class="p-3">কাস্টমার / তারিখ</th>
+                                <th class="p-3">কাস্টমার / ইনভয়েস</th>
                                 <th class="p-3">পণ্য তালিকা</th>
                                 <th class="p-3">বিল</th>
                                 <th class="p-3">বাকি</th>
@@ -285,7 +285,6 @@
 
             <div id="tab-expense-tracker" class="tab-content p-4 md:p-6 no-print">
                 <h3 class="font-bold text-gray-800 mb-4 text-xl"><i class="fas fa-wallet text-amber-600 mr-2"></i> খরচ ট্র্যাকিং ম্যানেজমেন্ট</h3>
-                
                 <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6 space-y-3">
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
                         <div>
@@ -320,7 +319,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-4 bg-gray-50 p-4 md:p-5 rounded-2xl border border-gray-200 h-fit space-y-3">
                         <h4 class="font-bold text-gray-700 text-sm" id="expenseFormHeader">নতুন খরচ বিবরণী</h4>
@@ -375,7 +373,6 @@
 
             <div id="tab-bank" class="tab-content p-4 md:p-6 no-print">
                 <h3 class="font-bold text-gray-800 mb-4 text-xl"><i class="fas fa-university text-purple-600 mr-2"></i> ডিজিটাল ব্যাংক লেজার বুক</h3>
-                
                 <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 mb-6 space-y-3">
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
                         <div>
@@ -414,8 +411,8 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-gray-500">বিবরণ (ফাঁকা রাখলে অটো ইনভয়েস জেনারেট হবে)</label>
-                            <input type="text" id="bankTxNote" placeholder="বিবরণ অথবা ফাঁকা রাখুন" class="w-full p-2 border rounded-lg bg-white text-xs md:text-sm">
+                            <label class="text-[10px] font-bold text-gray-500">বিবরণ</label>
+                            <input type="text" id="bankTxNote" placeholder="বিবরণ লিখুন" class="w-full p-2 border rounded-lg bg-white text-xs md:text-sm">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-500">টাকার পরিমাণ (৳)</label>
@@ -477,10 +474,11 @@
 
     <div id="receiptView">
         <div style="text-align: center; border-bottom: 1px dashed #000; padding-bottom: 10px; margin-bottom: 10px;">
-            <h2 style="margin: 0; font-size: 16px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h2>
-            <p style="margin: 5px 0; font-size: 12px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর<br>মোবাইল: ০১৭১৪০৬৮৬৭৬</p>
+            <h2 class="shop-name-display" style="margin: 0; font-size: 16px; font-weight: bold;"></h2>
+            <p class="shop-info-display" style="margin: 5px 0; font-size: 12px;"></p>
         </div>
-        <div style="font-size: 12px; margin-bottom: 10px;">
+        <div style="font-size: 12px; margin-bottom: 10px; border-bottom: 1px dashed #000; padding-bottom: 8px;">
+            <p style="margin: 3px 0;"><strong>ইনভয়েস:</strong> <span id="recInvoice"></span></p>
             <p style="margin: 3px 0;"><strong>তারিখ:</strong> <span id="recDate"></span></p>
             <p style="margin: 3px 0;"><strong>কাস্টমার:</strong> <span id="recMobile"></span></p>
         </div>
@@ -497,22 +495,25 @@
         <div style="font-size: 12px; margin-top: 10px; border-top: 1px dashed #000; padding-top: 6px;">
             <div style="display: flex; justify-content: space-between; margin: 2px 0;"><span>সাব-টোটাল:</span><span id="recSub"></span></div>
             <div style="display: flex; justify-content: space-between; margin: 2px 0;"><span>ডিসকাউন্ট:</span><span id="recDisc"></span></div>
-            <div style="display: flex; justify-content: space-between; font-weight: bold; margin: 2px 0;"><span>নিট বিল:</span><span id="recNet"></span></div>
+            <div style="display: flex; justify-content: space-between; font-weight: bold; margin: 2px 0; font-size: 13px;"><span>নিট বিল:</span><span id="recNet"></span></div>
             <div style="display: flex; justify-content: space-between; margin: 2px 0;"><span>পেইড:</span><span id="recPaid"></span></div>
             <div style="display: flex; justify-content: space-between; font-weight: bold; color: red; margin: 2px 0;"><span>বাকি:</span><span id="recDue"></span></div>
+        </div>
+        <div style="text-align: center; margin-top: 15px; font-size: 10px;">
+            <p>ধন্যবাদ! আবার আসবেন।</p>
         </div>
     </div>
 
     <div id="a4ReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h1>
-            <p style="margin: 0 0 10px 0; font-size: 14px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর | মোবাইল: 01823007492</p>
+            <h1 class="shop-name-display" style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;"></h1>
+            <p class="shop-info-display" style="margin: 0 0 10px 0; font-size: 14px;"></p>
             <h2 style="margin: 0; font-size: 18px;">বিক্রয় বিবরণী রিপোর্ট</h2>
         </div>
         <table style="width: 100%; border-collapse: collapse; font-size: 13px;" border="1" cellpadding="6">
             <thead>
                 <tr style="background-color: #f3f4f6;">
-                    <th>তারিখ</th><th>কাস্টমার</th><th>পণ্য বিবরণী</th><th>মোট বিল</th><th>পরিশোধ</th><th>বাকি</th>
+                    <th>তারিখ</th><th>ইনভয়েস</th><th>কাস্টমার</th><th>পণ্য বিবরণী</th><th>মোট বিল</th><th>পরিশোধ</th><th>বাকি</th>
                 </tr>
             </thead>
             <tbody id="a4ReportRows"></tbody>
@@ -521,8 +522,8 @@
 
     <div id="a4ExpenseReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h1>
-            <p style="margin: 0 0 10px 0; font-size: 14px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর | মোবাইল: 01823007492</p>
+            <h1 class="shop-name-display" style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;"></h1>
+            <p class="shop-info-display" style="margin: 0 0 10px 0; font-size: 14px;"></p>
             <h2 style="margin: 0; font-size: 18px;">খরচ বিবরণী রিপোর্ট (দিন ভিত্তিক)</h2>
             <p id="expenseReportPeriod" style="font-size: 12px; margin: 5px 0 0 0; color: #444;"></p>
         </div>
@@ -538,8 +539,8 @@
 
     <div id="a4BankReportView" style="font-family: sans-serif; color: #000;">
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;">মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট</h1>
-            <p style="margin: 0 0 10px 0; font-size: 14px;">বারীনগর বাজার হাইস্কুল রোড সদর, যশোর | মোবাইল: 01823007492</p>
+            <h1 class="shop-name-display" style="margin: 0 0 5px 0; font-size: 24px; font-weight: bold;"></h1>
+            <p class="shop-info-display" style="margin: 0 0 10px 0; font-size: 14px;"></p>
             <h2 style="margin: 0; font-size: 18px;">ডিজিটাল ব্যাংক লেজার বুক রিপোর্ট</h2>
             <p id="bankReportPeriod" style="font-size: 12px; margin: 5px 0 0 0; color: #444;"></p>
         </div>
@@ -563,6 +564,14 @@
     </div>
 
     <script>
+        // ================= DYNAMIC SHOP CONFIGURATION =================
+        const shopConfig = {
+            name: "মেধাবিকাশ স্টেশনারি এন্ড ডিজিটাল প্রিন্ট",
+            address: "বারীনগর বাজার হাইস্কুল রোড সদর, যশোর",
+            phone: "০১৭১৪০৬৮৬৭৬"
+        };
+        // ===============================================================
+
         let products = JSON.parse(localStorage.getItem('habib_inv')) || [];
         let salesHistory = JSON.parse(localStorage.getItem('habib_sales_history')) || [];
         let expenses = JSON.parse(localStorage.getItem('habib_expenses')) || [];
@@ -578,6 +587,10 @@
         let categoryChartInstance = null;
 
         window.onload = function() {
+            // Setup dynamic text across all elements containing these classes
+            document.querySelectorAll('.shop-name-display').forEach(el => el.innerText = shopConfig.name);
+            document.querySelectorAll('.shop-info-display').forEach(el => el.innerHTML = `${shopConfig.address}<br>মোবাইল: ${shopConfig.phone}`);
+
             if (localStorage.getItem('habib_login_session') === 'true') showDashboard();
             else document.getElementById('authPage').classList.add('active-page');
         };
@@ -586,6 +599,16 @@
             document.getElementById('authPage').classList.remove('active-page');
             document.getElementById('profilePage').classList.add('active-page');
             refreshUI();
+        }
+
+        // Print utility to fix print glitch/errors securely
+        function triggerPrint(printClass) {
+            document.body.className = printClass;
+            window.onafterprint = function() {
+                document.body.className = "bg-gray-100 font-sans antialiased text-gray-800";
+                window.onafterprint = null; // Clean up listener
+            };
+            setTimeout(() => { window.print(); }, 150);
         }
 
         function switchTab(tabName) {
@@ -668,7 +691,6 @@
                 let manualBankDebit = bankTransactions.reduce((sum, tx) => tx.type === 'debit' ? sum + Number(tx.amount) : sum, 0);
                 let autoExpenseBankDebit = expenses.reduce((sum, e) => e.source === 'Bank' ? sum + Number(e.amount) : sum, 0);
                 
-                // Removed auto-sales from bank balance calculation
                 let currentBankBalance = totalBankCredit - (manualBankDebit + autoExpenseBankDebit);
 
                 document.getElementById('statValue').innerText = "৳ " + totalVal;
@@ -751,7 +773,14 @@
         }
         
         function makeSale() {
-            const mob = document.getElementById('customerMobile').value.trim(); const subTotal = Number(document.getElementById('saleSubTotal').value) || 0; const discount = Number(document.getElementById('saleDiscount').value) || 0; const netTotal = Number(document.getElementById('saleNetTotal').value) || 0; const paid = Number(document.getElementById('salePaid').value) || 0; const dueAmt = Number(document.getElementById('saleDue').value) || 0; const editIndex = document.getElementById('editSaleIndex').value;
+            const mob = document.getElementById('customerMobile').value.trim(); 
+            const subTotal = Number(document.getElementById('saleSubTotal').value) || 0; 
+            const discount = Number(document.getElementById('saleDiscount').value) || 0; 
+            const netTotal = Number(document.getElementById('saleNetTotal').value) || 0; 
+            const paid = Number(document.getElementById('salePaid').value) || 0; 
+            const dueAmt = Number(document.getElementById('saleDue').value) || 0; 
+            const editIndex = document.getElementById('editSaleIndex').value;
+            
             if(!mob || currentCart.length === 0) return alert("মোবাইল ও কার্ট ফিল্ড খালি");
             
             currentCart.forEach(item => {
@@ -763,12 +792,39 @@
             });
 
             const now = new Date();
-            const saleData = { mobile: mob, items: [...currentCart], subTotal, discount, netTotal, paid, due: dueAmt, displayDate: now.toLocaleString('bn-BD'), date: now.toISOString().split('T')[0], timestamp: now.getTime() };
+            // Preserve old invoice number if editing, else generate a new one
+            const invoiceNo = editIndex === "-1" ? generateAutoInvoiceNumber() : (salesHistory[editIndex].invoiceNo || generateAutoInvoiceNumber());
             
-            if(editIndex == "-1") salesHistory.push(saleData);
-            else { salesHistory[editIndex] = saleData; cancelSaleEdit(); }
+            const saleData = { 
+                invoiceNo: invoiceNo,
+                mobile: mob, 
+                items: [...currentCart], 
+                subTotal, 
+                discount, 
+                netTotal, 
+                paid, 
+                due: dueAmt, 
+                displayDate: now.toLocaleString('bn-BD'), 
+                date: now.toISOString().split('T')[0], 
+                timestamp: now.getTime() 
+            };
             
-            currentCart = []; backupEditItems = []; updateCartUI(); refreshUI(); document.getElementById('customerMobile').value = ''; switchTab('history');
+            let targetPrintIndex = -1;
+
+            if(editIndex == "-1") {
+                salesHistory.push(saleData);
+                targetPrintIndex = salesHistory.length - 1;
+            } else { 
+                salesHistory[editIndex] = saleData; 
+                targetPrintIndex = editIndex;
+                cancelSaleEdit(); 
+            }
+            
+            currentCart = []; backupEditItems = []; updateCartUI(); refreshUI(); document.getElementById('customerMobile').value = ''; 
+            
+            // Instantly print after sale making
+            printReceiptDirectly(targetPrintIndex);
+            switchTab('history');
         }
         
         function renderSalesTable(data) {
@@ -776,10 +832,11 @@
             data.forEach((s, i) => {
                 let itemsText = s.items.map(it => `${it.name} (${it.qty}টি)`).join(', ');
                 let originalIndex = salesHistory.findIndex(sh => sh.timestamp === s.timestamp);
+                let inv = s.invoiceNo || 'N/A';
                 
                 body.innerHTML += `
                     <tr>
-                        <td class="p-3 text-xs font-bold">${s.mobile}<br><span class="text-gray-400 font-normal">${s.date}</span></td>
+                        <td class="p-3 text-xs font-bold">${s.mobile}<br><span class="text-gray-400 font-normal">${inv} | ${s.date}</span></td>
                         <td class="p-3 text-xs max-w-[100px] truncate" title="${itemsText}">${itemsText}</td>
                         <td class="p-3 font-bold text-xs">৳${s.netTotal}</td>
                         <td class="p-3 text-red-600 font-bold text-xs">৳${s.due}</td>
@@ -841,13 +898,14 @@
         
         function printReceiptDirectly(index) {
             const s = salesHistory[index]; 
+            document.getElementById('recInvoice').innerText = s.invoiceNo || 'N/A';
             document.getElementById('recDate').innerText = s.displayDate || s.date; 
             document.getElementById('recMobile').innerText = s.mobile;
             
             const rRows = document.getElementById('receiptRows'); 
             rRows.innerHTML = '';
             s.items.forEach(item => { 
-                rRows.innerHTML += `<tr style="border-bottom: 1px solid #eee;"><td style="padding: 5px 0;">${item.name}</td><td align="center">${item.qty} টি</td><td align="right">৳${item.subTotal}</td></tr>`; 
+                rRows.innerHTML += `<tr style="border-bottom: 1px solid #eee;"><td style="padding: 5px 0;">${item.name}</td><td align="center">${item.qty}</td><td align="right">৳${item.subTotal}</td></tr>`; 
             });
             
             document.getElementById('recSub').innerText = "৳" + s.subTotal; 
@@ -856,14 +914,7 @@
             document.getElementById('recPaid').innerText = "৳" + s.paid; 
             document.getElementById('recDue').innerText = "৳" + s.due;
             
-            document.body.className = "print-receipt"; 
-            
-            setTimeout(() => {
-                window.print();
-                setTimeout(() => {
-                    document.body.className = "bg-gray-100 font-sans antialiased text-gray-800";
-                }, 500);
-            }, 250);
+            triggerPrint("print-receipt");
         }
 
         function saveExpense() {
@@ -941,7 +992,6 @@
         }
 
         function printA4ExpenseReport() {
-            document.body.className = "print-a4-expense";
             const rRows = document.getElementById('a4ExpenseReportRows');
             rRows.innerHTML = '';
             
@@ -967,10 +1017,7 @@
                     <td align="right" style="color: red;">৳${totalExpAmount}</td>
                 </tr>`;
             
-            setTimeout(() => {
-                window.print();
-                setTimeout(() => { document.body.className = "bg-gray-100 font-sans antialiased text-gray-800"; }, 500);
-            }, 250);
+            triggerPrint("print-a4-expense");
         }
 
         function saveBankTransaction() {
@@ -1022,8 +1069,6 @@
                     });
                 }
             });
-
-            // Removed the Auto Sales import completely
 
             combinedLedger.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
@@ -1090,7 +1135,6 @@
         }
 
         function printA4BankReport() {
-            document.body.className = "print-a4-bank";
             const rRows = document.getElementById('a4BankReportRows');
             rRows.innerHTML = '';
 
@@ -1115,8 +1159,6 @@
                 }
             });
             
-            // Removed Auto-sales from Print Report completely
-
             fullLedger.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
 
             let runningBalance = 0;
@@ -1194,12 +1236,7 @@
                 </tr>
             `;
 
-            setTimeout(() => {
-                window.print();
-                setTimeout(() => {
-                    document.body.className = "bg-gray-100 font-sans antialiased text-gray-800";
-                }, 500);
-            }, 250);
+            triggerPrint("print-a4-bank");
         }
 
         function updateCharts() {
@@ -1220,12 +1257,21 @@
         }
 
         function filterSales() {
-            const from = document.getElementById('filterFrom').value; const to = document.getElementById('filterTo').value; const mob = document.getElementById('searchCustomer').value.trim();
+            const from = document.getElementById('filterFrom').value; 
+            const to = document.getElementById('filterTo').value; 
+            const mob = document.getElementById('searchCustomer').value.trim().toLowerCase();
+            
             currentFilteredList = salesHistory.filter(sale => {
                 let mDate = true, mMob = true; let sDate = new Date(sale.timestamp);
                 if(from) { let f = new Date(from); f.setHours(0,0,0,0); if(sDate < f) mDate = false; }
                 if(to) { let t = new Date(to); t.setHours(23,59,59,999); if(sDate > t) mDate = false; }
-                if(mob && !sale.mobile.includes(mob)) mMob = false;
+                
+                // Allow searching by mobile OR invoice number
+                if(mob) {
+                    let searchInvoice = sale.invoiceNo ? sale.invoiceNo.toLowerCase() : "";
+                    let searchMob = sale.mobile ? sale.mobile.toLowerCase() : "";
+                    if(!searchMob.includes(mob) && !searchInvoice.includes(mob)) mMob = false;
+                }
                 return mDate && mMob;
             });
             let fSale = currentFilteredList.reduce((a, b) => a + Number(b.netTotal||0), 0);
@@ -1233,24 +1279,28 @@
             document.getElementById('fSumSale').innerText = "৳" + fSale; document.getElementById('fSumDue').innerText = "৳" + fDue;
             document.getElementById('filterSummaryBox').classList.remove('hidden'); renderSalesTable(currentFilteredList);
         }
-        function clearFilter() { document.getElementById('filterFrom').value = ''; document.getElementById('filterTo').value = ''; document.getElementById('searchCustomer').value = ''; document.getElementById('filterSummaryBox').classList.add('hidden'); renderSalesTable(salesHistory); }
+        
+        function clearFilter() { 
+            document.getElementById('filterFrom').value = ''; 
+            document.getElementById('filterTo').value = ''; 
+            document.getElementById('searchCustomer').value = ''; 
+            document.getElementById('filterSummaryBox').classList.add('hidden'); 
+            currentFilteredList = [...salesHistory];
+            renderSalesTable(salesHistory); 
+        }
         
         function printA4Report() { 
-            document.body.className = "print-a4"; 
             const rRows = document.getElementById('a4ReportRows'); 
             rRows.innerHTML = ''; 
             currentFilteredList.forEach(s => { 
                 let itemsText = s.items.map(it => `${it.name} (${it.qty}টি)`).join(', '); 
-                rRows.innerHTML += `<tr><td>${s.date}</td><td>${s.mobile}</td><td>${itemsText}</td><td>৳${s.netTotal}</td><td>৳${s.paid}</td><td style="color:red;">৳${s.due}</td></tr>`; 
+                let inv = s.invoiceNo || 'N/A';
+                rRows.innerHTML += `<tr><td>${s.date}</td><td>${inv}</td><td>${s.mobile}</td><td>${itemsText}</td><td>৳${s.netTotal}</td><td>৳${s.paid}</td><td style="color:red;">৳${s.due}</td></tr>`; 
             }); 
             
-            setTimeout(() => {
-                window.print(); 
-                setTimeout(() => {
-                    document.body.className = "bg-gray-100 font-sans antialiased text-gray-800"; 
-                }, 500);
-            }, 250);
+            triggerPrint("print-a4");
         }
+        
         function handleLogin(e) { 
             e.preventDefault(); 
             const user = document.getElementById('loginMobile').value;
