@@ -338,8 +338,10 @@
 
             filteredProducts.forEach(product => {
                 const stockColor = product.stock < 10 ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-slate-500 bg-slate-100';
+                
+                // FIXED: Changed object-cover to object-contain p-2 to fit any image size automatically
                 const visualElement = product.image 
-                    ? `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">`
+                    ? `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-contain p-2">`
                     : `<i data-lucide="package" class="w-16 h-16 text-slate-400"></i>`;
                 
                 const btnStatus = product.stock > 0 
