@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Firebase Compat SDKs (Best for running directly from an HTML file) -->
+    <!-- Firebase Compat SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
@@ -29,10 +29,10 @@
                         <i data-lucide="shopping-bag" class="w-4 h-4"></i>
                         <span class="hidden sm:inline">Storefront</span>
                     </button>
-                    <!-- Hidden until admin logs in -->
-                    <button id="btn-erp" onclick="switchView('erp')" class="hidden flex items-center space-x-2 bg-slate-800 border border-slate-700 px-3 py-2 rounded-md font-medium text-xs sm:text-sm transition">
+                    <!-- Visible to customers to view ledger -->
+                    <button id="btn-erp" onclick="switchView('erp')" class="flex items-center space-x-2 bg-slate-800 border border-slate-700 px-3 py-2 rounded-md font-medium text-xs sm:text-sm transition">
                         <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                        <span class="hidden sm:inline">ERP Backend</span>
+                        <span class="hidden sm:inline">Live Order Ledger</span>
                         <span id="erp-badge" class="hidden bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full ml-1">New</span>
                     </button>
                     <!-- Hidden until admin logs in -->
@@ -50,7 +50,7 @@
         </div>
     </nav>
 
-    <!-- Error Banner (Hidden by default) -->
+    <!-- Error Banner -->
     <div id="firebase-error" class="bg-rose-600 text-white text-center py-2 text-sm font-bold hidden flex items-center justify-center space-x-2">
         <i data-lucide="alert-triangle" class="w-4 h-4"></i>
         <span id="firebase-error-text">Database connection error.</span>
@@ -60,12 +60,9 @@
     <main id="view-shop" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 pb-5">
             <div>
-                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">মিল্টন হুসাইন বারীনগর বাজার সাতমাইল সদর যশোর-০১৮২৩০০৭৪৯২</h1>
-                <p class="mt-2 text-sm text-gray-500">তথ্য প্রকাশের সবচেয়ে শক্তিশালী ও আধুনিক ডিজিটাল মাধ্যম হলো ওয়েবসাইট এর মতো প্ল্যাটফর্ম। এটি বিশ্বজুড়ে নিমিষেই যেকোনো ব্যক্তি, প্রতিষ্ঠান বা সরকারের তথ্য বিশাল জনগোষ্ঠীর কাছে পৌঁছে দেয়।
-                প্রায় দুই দশক সময় ধরে বাংলাদেশ বিশ্বের সাথে সংযুক্ত আছে ইন্টারনেটের মাধ্যমে।
-                এ দীর্ঘ সময়ের তুলনায় ইন্টারনেট জগতে বাংলাদেশী ওয়েবসাইট এর সংখ্যা নিতান্তই অল্প। বর্তমানে এদেশের ৯০ ভাগ প্রতিষ্ঠানের নিজস্ব কোন ওয়েবসাইট নেই।
-                ইচ্ছে থাকা সত্ত্বেও বহু প্রতিষ্ঠান ওয়েবসাইট বানাতে পারছে না অত্যাধিক খরচের কারনে।
-                দেশের তৃণমূল পর্যায়ে ওয়েবসাইটকে ছড়িয়ে দেয়ার লক্ষ্যে আমাদের যাত্রা শুরু। ছোট ও মাঝারি আকারের ব্যবসা প্রতিষ্ঠানের জন্যে আমরা অফার করছি অত্যন্ত সহজলভ্য ওয়েব ডিজাইন প্যাকেজ।</p>
+                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Melton Hussain-DEV-01823-007492</h1>
+                <p class="mt-2 text-sm text-gray-500">Live catalog linked directly to regional warehouse logistics channels.</p>
+                <p class="mt-2 text-sm text-gray-500">এখানে ফ্রিল্যান্সিং, ডিজিটাল মার্কেটিং, এবং ওয়েব ডেভেলপমেন্ট শেখানো হয়।</p>
             </div>
             <div class="mt-4 md:mt-0 flex items-center bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium border border-emerald-200 shadow-sm animate-pulse">
                 <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
@@ -84,7 +81,6 @@
         </div>
 
         <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Dynamic products go here -->
             <p class="col-span-full text-center text-gray-500 py-10" id="loading-text">Loading live data...</p>
         </div>
     </main>
@@ -235,14 +231,8 @@
             </div>
             <form id="checkout-form" onsubmit="processCheckout(event)" class="p-5">
                 <input type="hidden" id="checkout-product-id">
-                <div class="mb-4 bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm flex items-center space-x-3">
-                    <div id="checkout-item-img-container" class="w-12 h-12 rounded bg-gray-200 flex-shrink-0 overflow-hidden flex items-center justify-center border">
-                        <i data-lucide="package" class="w-6 h-6 text-gray-400"></i>
-                    </div>
-                    <div>
-                        <span class="text-gray-500 text-xs block">Item:</span> 
-                        <span id="checkout-item-name" class="font-bold text-slate-900"></span>
-                    </div>
+                <div class="mb-4 bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm">
+                    <span class="text-gray-500">Item:</span> <span id="checkout-item-name" class="font-bold text-slate-900 ml-1"></span>
                 </div>
                 <div class="space-y-4">
                     <div>
@@ -279,7 +269,6 @@
             measurementId: "G-8DGB6F7HRC"
         };
 
-        // --- ERROR TRACKING CHECK ---
         function showError(message) {
             const errBanner = document.getElementById('firebase-error');
             document.getElementById('firebase-error-text').innerText = message;
@@ -291,7 +280,6 @@
             showError("CRITICAL: You forgot to replace 'YOUR_API_KEY' with your real Firebase credentials in the code!");
         }
 
-        // Initialize Firebase
         let db;
         try {
             firebase.initializeApp(firebaseConfig);
@@ -300,13 +288,11 @@
             showError("Firebase Initialization Error: " + err.message);
         }
 
-        // State variables
         const systemData = { products: [], orders: [] };
         let isAdminLoggedIn = false;
 
         // --- REALTIME LISTENERS ---
         if (db) {
-            // Watch Products
             db.ref('products').on('value', snapshot => {
                 const data = snapshot.val() || {};
                 systemData.products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
@@ -316,7 +302,6 @@
                 showError("Permission Denied: Make sure your Firebase Rules are set to true for read/write.");
             });
 
-            // Watch Orders
             db.ref('orders').on('value', snapshot => {
                 const data = snapshot.val() || {};
                 systemData.orders = Object.keys(data).map(key => ({ orderId: key, ...data[key] })).reverse();
@@ -324,41 +309,6 @@
             }, error => {
                 console.error("Order read error", error);
             });
-        }
-
-        // --- Helper Function: Auto Resizes Any Uploaded Photo Size ---
-        function resizeAndFitPhoto(file, maxDimension, callback) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > maxDimension) {
-                            height = Math.round((height * maxDimension) / width);
-                            width = maxDimension;
-                        }
-                    } else {
-                        if (height > maxDimension) {
-                            width = Math.round((width * maxDimension) / height);
-                            height = maxDimension;
-                        }
-                    }
-
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // Compress JPEG data URL automatically
-                    callback(canvas.toDataURL('image/jpeg', 0.85));
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
         }
 
         // --- 2. RENDER FUNCTIONS ---
@@ -369,7 +319,6 @@
             const searchInput = document.getElementById('product-search');
             const searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
-            // Filter products based on search term (Name or Category)
             const filteredProducts = systemData.products.filter(product => {
                 const nameMatch = product.name ? product.name.toLowerCase().includes(searchQuery) : false;
                 const catMatch = product.category ? product.category.toLowerCase().includes(searchQuery) : false;
@@ -384,9 +333,8 @@
             filteredProducts.forEach(product => {
                 const stockColor = product.stock < 10 ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-slate-500 bg-slate-100';
                 
-                // FIXED: Automatically scales and fits any image size within container bounds
                 const visualElement = product.image 
-                    ? `<img src="${product.image}" alt="${product.name}" class="max-h-full max-w-full object-contain p-2 m-auto">`
+                    ? `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-contain p-2">`
                     : `<i data-lucide="package" class="w-16 h-16 text-slate-400"></i>`;
                 
                 const btnStatus = product.stock > 0 
@@ -395,7 +343,7 @@
 
                 grid.innerHTML += `
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
-                        <div class="h-48 bg-slate-100 flex items-center justify-center overflow-hidden relative">
+                        <div class="h-48 bg-slate-100 flex items-center justify-center overflow-hidden">
                             ${visualElement}
                         </div>
                         <div class="p-5">
@@ -422,18 +370,35 @@
             }
 
             systemData.orders.forEach(order => {
-                const isPending = order.status === 'Pending Admin Approval';
-                const statusColor = isPending ? 'text-amber-600 bg-amber-50 border-amber-200' : 'text-emerald-600 bg-emerald-50 border-emerald-200';
-                
-                const statusBlock = isPending 
-                    ? `<button onclick="approveOrder('${order.orderId}')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs px-3 py-1.5 rounded transition shadow-sm flex items-center space-x-1">
-                        <i data-lucide="check-circle" class="w-3 h-3"></i> <span>Approve</span>
-                       </button>`
-                    : `<span class="text-xs font-medium text-gray-400 flex items-center"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> Locked</span>`;
+                const status = order.status || 'Pending Admin Approval';
+                let statusColor = 'text-amber-600 bg-amber-50 border-amber-200';
+                if (status === 'Approved & Synced') statusColor = 'text-emerald-600 bg-emerald-50 border-emerald-200';
+                if (status === 'Cancelled') statusColor = 'text-rose-600 bg-rose-50 border-rose-200';
 
-                const orderImg = order.itemImage 
-                    ? `<img src="${order.itemImage}" class="w-8 h-8 rounded object-contain bg-slate-100 border mr-2 flex-shrink-0">` 
-                    : `<div class="w-8 h-8 rounded bg-slate-100 border mr-2 flex items-center justify-center flex-shrink-0"><i data-lucide="package" class="w-4 h-4 text-gray-400"></i></div>`;
+                // RESTRICTED ACTIONS: ADMIN ONLY
+                let actionsContent = '<span class="text-xs text-gray-400 italic">Admin only</span>';
+
+                if (isAdminLoggedIn) {
+                    let statusButtons = '';
+                    if (status === 'Pending Admin Approval') {
+                        statusButtons = `
+                            <button onclick="approveOrder('${order.orderId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-2.5 py-1.5 rounded transition shadow-sm flex items-center space-x-1" title="Approve Order">
+                                <i data-lucide="check-circle" class="w-3 h-3"></i> <span>Approve</span>
+                            </button>
+                            <button onclick="cancelOrder('${order.orderId}')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs px-2.5 py-1.5 rounded transition shadow-sm flex items-center space-x-1" title="Cancel Order">
+                                <i data-lucide="x-circle" class="w-3 h-3"></i> <span>Cancel</span>
+                            </button>
+                        `;
+                    }
+
+                    // Always allow Delete button for admins
+                    actionsContent = `
+                        ${statusButtons}
+                        <button onclick="deleteOrder('${order.orderId}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded hover:bg-rose-50 transition" title="Delete Order">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    `;
+                }
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50 transition border-b border-gray-50 last:border-none">
@@ -443,19 +408,13 @@
                             <div class="text-xs text-gray-500 flex items-center mt-1"><i data-lucide="phone" class="w-3 h-3 mr-1"></i> ${order.customer?.mobile || '-'}</div>
                             <div class="text-xs text-gray-500 flex items-start mt-1"><i data-lucide="map-pin" class="w-3 h-3 mr-1 mt-0.5"></i> <span class="max-w-[200px] truncate">${order.customer?.address || '-'}</span></div>
                         </td>
-                        <td class="p-4 font-medium align-top flex items-center">
-                            ${orderImg}
-                            <span>${order.itemName}</span>
-                        </td>
+                        <td class="p-4 font-medium align-top">${order.itemName}</td>
                         <td class="p-4 font-bold text-slate-900 align-top">$${Number(order.total).toFixed(2)}</td>
                         <td class="p-4 align-top">
-                            <span class="text-xs font-semibold px-2 py-1 rounded border ${statusColor}">${order.status}</span>
+                            <span class="text-xs font-semibold px-2 py-1 rounded border ${statusColor}">${status}</span>
                         </td>
                         <td class="p-4 align-top flex items-center justify-center space-x-2">
-                            ${statusBlock} 
-                            <button onclick="deleteOrder('${order.orderId}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded hover:bg-rose-50 transition" title="Delete Order">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
+                            ${actionsContent}
                         </td>
                     </tr>`;
             });
@@ -472,13 +431,9 @@
             }
 
             systemData.products.forEach(product => {
-                const imgThumb = product.image 
-                    ? `<img src="${product.image}" class="w-8 h-8 rounded object-contain bg-slate-100 border mr-2 inline-block">` 
-                    : '';
-
                 listContainer.innerHTML += `
                     <tr class="hover:bg-slate-50 transition border-b border-gray-100 last:border-none">
-                        <td class="p-3 font-semibold text-slate-900 flex items-center">${imgThumb} ${product.name}</td>
+                        <td class="p-3 font-semibold text-slate-900">${product.name}</td>
                         <td class="p-3"><span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">${product.category}</span></td>
                         <td class="p-3 font-mono text-slate-900 font-medium">$${Number(product.price).toFixed(2)}</td>
                         <td class="p-3 font-medium">${product.stock} units</td>
@@ -502,19 +457,25 @@
         }
 
         function deleteOrder(orderId) {
+            if (!isAdminLoggedIn) return alert("Access Denied: Admin login required.");
             if (!db) return showError("Database not connected.");
-            const pass = prompt(`Admin Required. Delete Order [${orderId}].\nEnter password:`);
-            if (pass === '12345') {
+            if (confirm(`Permanently delete Order [${orderId}]?`)) {
                 db.ref('orders/' + orderId).remove().catch(err => alert("Error: " + err.message));
-            } else if (pass !== null) alert("Denied: Incorrect Password.");
+            }
+        }
+
+        function cancelOrder(orderId) {
+            if (!isAdminLoggedIn) return alert("Access Denied: Admin login required.");
+            if (!db) return showError("Database not connected.");
+            if (confirm(`Cancel Order [${orderId}]?`)) {
+                db.ref('orders/' + orderId).update({ status: 'Cancelled' }).catch(err => alert("Error: " + err.message));
+            }
         }
 
         function approveOrder(orderId) {
+            if (!isAdminLoggedIn) return alert("Access Denied: Admin login required.");
             if (!db) return showError("Database not connected.");
-            const pass = prompt("Admin Required.\nEnter password to approve order:");
-            if (pass === '12345') {
-                db.ref('orders/' + orderId).update({ status: 'Approved & Synced' }).catch(err => alert("Error: " + err.message));
-            } else if (pass !== null) alert("Denied: Incorrect Password.");
+            db.ref('orders/' + orderId).update({ status: 'Approved & Synced' }).catch(err => alert("Error: " + err.message));
         }
 
         function handleLogin(event) {
@@ -525,7 +486,6 @@
             if (user === 'admin' && pass === '12345') {
                 isAdminLoggedIn = true;
 
-                // Unhide ERP and Add Product buttons, hide Login button
                 document.getElementById('btn-erp').classList.remove('hidden');
                 document.getElementById('btn-add').classList.remove('hidden');
                 document.getElementById('btn-login').classList.add('hidden');
@@ -533,6 +493,7 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('add-product-screen').classList.remove('hidden');
                 renderAdminCatalog(); 
+                renderOrders(); 
                 event.target.reset();
             } else {
                 alert("Invalid Credentials. User: 'admin' | Pass: '12345'");
@@ -542,14 +503,13 @@
         function handleLogout() {
             isAdminLoggedIn = false;
 
-            // Hide ERP and Add Product buttons, show Login button
-            document.getElementById('btn-erp').classList.add('hidden');
             document.getElementById('btn-add').classList.add('hidden');
             document.getElementById('btn-login').classList.remove('hidden');
 
             document.getElementById('auth-screen').classList.remove('hidden');
             document.getElementById('add-product-screen').classList.add('hidden');
             
+            renderOrders(); 
             switchView('shop');
         }
 
@@ -585,10 +545,9 @@
             };
 
             if (fileInput.files && fileInput.files[0]) {
-                // Resize photo to max 800px automatically before upload
-                resizeAndFitPhoto(fileInput.files[0], 800, function(resizedDataURL) {
-                    finalizeAddProduct(resizedDataURL);
-                });
+                const reader = new FileReader();
+                reader.onload = function(e) { finalizeAddProduct(e.target.result); };
+                reader.readAsDataURL(fileInput.files[0]); 
             } else {
                 finalizeAddProduct(null); 
             }
@@ -600,16 +559,7 @@
             
             document.getElementById('checkout-product-id').value = productId;
             document.getElementById('checkout-item-name').innerText = product.name;
-            
-            const imgContainer = document.getElementById('checkout-item-img-container');
-            if (product.image) {
-                imgContainer.innerHTML = `<img src="${product.image}" class="w-full h-full object-contain p-1">`;
-            } else {
-                imgContainer.innerHTML = `<i data-lucide="package" class="w-6 h-6 text-gray-400"></i>`;
-            }
-
             document.getElementById('checkout-modal').classList.remove('hidden');
-            lucide.createIcons();
         }
 
         function closeCheckout() {
@@ -630,7 +580,6 @@
 
                 const newOrder = {
                     itemName: product.name,
-                    itemImage: product.image || null,
                     total: product.price,
                     status: 'Pending Admin Approval', 
                     customer: {
@@ -649,11 +598,6 @@
         }
 
         function switchView(view) {
-            if (view === 'erp' && !isAdminLoggedIn) {
-                alert("Access Denied: Please login to access ERP Backend.");
-                return;
-            }
-
             ['view-shop', 'view-erp', 'view-add'].forEach(v => document.getElementById(v).classList.add('hidden'));
             ['btn-shop', 'btn-erp', 'btn-add', 'btn-login'].forEach(b => {
                 const el = document.getElementById(b);
@@ -680,7 +624,6 @@
             }
         }
         
-        // Initial setup
         lucide.createIcons();
     </script>
 </body>
