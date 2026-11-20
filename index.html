@@ -226,7 +226,7 @@
 
                 <div class="p-4 bg-gradient-to-t from-slate-100/80 to-slate-50 border-t border-slate-200/60 space-y-3">
                     <div class="space-y-2 text-xs text-slate-600 font-medium">
-                        <div class="flex justify-between font-bold bg-emerald-50/80 p-2 rounded-xl border border-emerald-100 text-emerald-800">
+                        <div id="cart-weight-row" class="flex justify-between font-bold bg-emerald-50/80 p-2 rounded-xl border border-emerald-100 text-emerald-800">
                             <span><i class="fa-solid fa-scale-balanced mr-1"></i> Total Weight (kg)</span>
                             <span id="cart-total-weight">0.00 kg</span>
                         </div>
@@ -351,7 +351,7 @@
             <div class="bg-white/90 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">Item Inventory</h2>
-                    <p class="text-xs text-slate-500 font-medium mt-0.5">Manage stock levels with Price per kg and flexible Bulk Combobox (বস্তা, কার্টুন, ট্রে, নেট).</p>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">Dynamic pricing by unit: Price per kg for bulk units (বস্তা, কার্টুন, ট্রে, নেট) or direct Price per pic / box.</p>
                 </div>
                 <button onclick="openAddProductModalWithPermission()" class="w-full sm:w-auto justify-center px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-sm rounded-2xl shadow-lg shadow-emerald-600/30 transition transform active:scale-95 flex items-center">
                     <i class="fa-solid fa-plus-circle mr-2"></i> Add New Item <span class="ml-2 bg-black/20 px-2 py-0.5 rounded text-[10px]">🔒</span>
@@ -375,8 +375,8 @@
                             <tr class="bg-slate-50/80 text-slate-500 text-xs uppercase font-bold tracking-wider border-b border-slate-200/80">
                                 <th class="p-4">Item</th>
                                 <th class="p-4">Category</th>
-                                <th class="p-4">Rate (Per Kg)</th>
-                                <th class="p-4">Stock (Combobox Unit)</th>
+                                <th class="p-4">Rate (Dynamic Unit)</th>
+                                <th class="p-4">Stock (Unit)</th>
                                 <th class="p-4">Stock (kg)</th>
                                 <th class="p-4 text-center">Actions</th>
                             </tr>
@@ -541,7 +541,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-1.5">Rate Price (Per kg) (৳) *</label>
+                        <label id="prod-price-label" class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-1.5">Rate Price (Per kg) (৳) *</label>
                         <input type="number" step="0.01" min="0.01" id="prod-price" required placeholder="0.00" 
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold">
                     </div>
@@ -550,14 +550,16 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-1.5">Combobox Unit *</label>
-                        <select id="prod-unit2" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-emerald-800">
+                        <select id="prod-unit2" onchange="toggleProductUnitFields()" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-emerald-800">
                             <option value="বস্তা">বস্তা</option>
                             <option value="কার্টুন">কার্টুন</option>
                             <option value="ট্রে">ট্রে</option>
                             <option value="নেট">নেট</option>
+                            <option value="pic">pic</option>
+                            <option value="box">box</option>
                         </select>
                     </div>
-                    <div>
+                    <div id="prod-kg-per-bulk-group">
                         <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-1.5">Est. kg per Combobox Unit *</label>
                         <input type="number" step="0.1" min="0.1" id="prod-kg-per-bulk" required placeholder="10" value="10"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold">
@@ -566,11 +568,11 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-1.5">Stock Count (Selected Combobox Unit) *</label>
+                        <label id="prod-stock-bulk-label" class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-1.5">Stock Count (Selected Combobox Unit) *</label>
                         <input type="number" step="0.1" min="0" id="prod-stock-bulk" required placeholder="0" 
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold">
                     </div>
-                    <div>
+                    <div id="prod-stock-kg-group">
                         <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-1.5">Stock Count Total (kg) *</label>
                         <input type="number" step="0.1" min="0" id="prod-stock-kg" required placeholder="0" 
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold">
@@ -712,7 +714,7 @@
 
             <div class="p-4 sm:p-5 bg-gradient-to-t from-slate-100 to-slate-50 border-t border-slate-200 space-y-3">
                 <div class="space-y-1.5 text-xs text-slate-600 font-medium">
-                    <div class="flex justify-between font-bold bg-emerald-50 p-2 rounded-xl border border-emerald-100 text-emerald-800">
+                    <div id="mobile-cart-weight-row" class="flex justify-between font-bold bg-emerald-50 p-2 rounded-xl border border-emerald-100 text-emerald-800">
                         <span>Total Weight (kg)</span>
                         <span id="mobile-cart-total-weight">0.00 kg</span>
                     </div>
@@ -1063,7 +1065,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Invoice Items (Calculated strictly from Rate/Kg)</label>
+                    <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Invoice Items (Dynamic Unit Rate)</label>
                     <div id="edit-tx-items-container" class="space-y-2 border border-slate-200 rounded-2xl p-3 bg-slate-50 max-h-48 overflow-y-auto shadow-inner"></div>
                     <div class="mt-2.5 flex gap-2">
                         <select id="edit-add-item-select" class="flex-1 bg-white border border-slate-200 rounded-xl text-xs p-2.5 font-medium"></select>
@@ -1153,8 +1155,8 @@
                         <thead>
                             <tr class="border-b border-slate-200 text-slate-500 font-bold">
                                 <th class="pb-1.5">Item</th>
-                                <th class="text-center pb-1.5">Qty/Weight</th>
-                                <th class="text-right pb-1.5">Amount (kg base)</th>
+                                <th class="text-center pb-1.5">Qty / Weight</th>
+                                <th class="text-right pb-1.5">Amount</th>
                             </tr>
                         </thead>
                         <tbody id="receipt-items-tbody" class="divide-y divide-slate-100 font-medium"></tbody>
@@ -1239,6 +1241,51 @@
         let selectedCustomerId = 0;
         let activeCategory = 'All';
         let searchQuery = '';
+
+        // Helper: check if unit is piece/box based (no kg)
+        function isUnitOnlyMode(unit) {
+            return unit === 'pic' || unit === 'box';
+        }
+
+        // Helper: dynamic item line price calculation
+        function getItemLineTotal(item) {
+            if (isUnitOnlyMode(item.unit2)) {
+                return (item.price || 0) * (item.qtyBulk || 0);
+            }
+            return (item.price || 0) * (item.qtyKg || 0);
+        }
+
+        // Helper: toggle kg fields in Add/Edit Product Modal
+        function toggleProductUnitFields() {
+            const unit2 = document.getElementById('prod-unit2').value;
+            const isUnitOnly = isUnitOnlyMode(unit2);
+
+            const priceLabel = document.getElementById('prod-price-label');
+            const kgPerBulkGroup = document.getElementById('prod-kg-per-bulk-group');
+            const kgPerBulkInput = document.getElementById('prod-kg-per-bulk');
+            const stockBulkLabel = document.getElementById('prod-stock-bulk-label');
+            const stockKgGroup = document.getElementById('prod-stock-kg-group');
+            const stockKgInput = document.getElementById('prod-stock-kg');
+
+            if (isUnitOnly) {
+                priceLabel.innerText = `Rate Price (Per ${unit2}) (৳) *`;
+                stockBulkLabel.innerText = `Stock Count (${unit2}) *`;
+                kgPerBulkGroup.classList.add('hidden');
+                kgPerBulkInput.required = false;
+                if (!kgPerBulkInput.value) kgPerBulkInput.value = '1';
+                stockKgGroup.classList.add('hidden');
+                stockKgInput.required = false;
+                stockKgInput.value = '0';
+            } else {
+                priceLabel.innerText = 'Rate Price (Per kg) (৳) *';
+                stockBulkLabel.innerText = `Stock Count (${unit2}) *`;
+                kgPerBulkGroup.classList.remove('hidden');
+                kgPerBulkInput.required = true;
+                if (!kgPerBulkInput.value || kgPerBulkInput.value === '0') kgPerBulkInput.value = '10';
+                stockKgGroup.classList.remove('hidden');
+                stockKgInput.required = true;
+            }
+        }
 
         window.onload = function() {
             checkAuthStatus();
@@ -1939,6 +1986,13 @@
             }
 
             filtered.forEach(p => {
+                const isUnitOnly = isUnitOnlyMode(p.unit2);
+                const stockBadge = isUnitOnly
+                    ? `${p.stockBulk} ${p.unit2}`
+                    : `${p.stockKg} kg | ${p.stockBulk} ${p.unit2}`;
+                const priceUnitLabel = isUnitOnly ? `/ ${p.unit2}` : `/ kg`;
+                const addBtnLabel = isUnitOnly ? `Add (1 ${p.unit2})` : `Add (1kg & 1${p.unit2})`;
+
                 const card = document.createElement('div');
                 card.className = "bg-white rounded-3xl p-3 sm:p-3.5 shadow-sm hover:shadow-xl border border-slate-200/80 hover:border-emerald-500 transition-all duration-300 flex flex-col justify-between group transform hover:-translate-y-1";
                 
@@ -1949,16 +2003,16 @@
                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                                 onerror="this.src='https://placehold.co/400x300?text=Item'">
                             <span class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-slate-900/80 backdrop-blur-md text-white font-black text-[9px] sm:text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl shadow-lg">
-                                ${p.stockKg} kg | ${p.stockBulk} ${p.unit2}
+                                ${stockBadge}
                             </span>
                         </div>
                         <h4 class="font-black text-slate-800 text-xs sm:text-sm truncate px-0.5">${p.name}</h4>
-                        <p class="text-[11px] sm:text-xs text-emerald-700 font-bold px-0.5 mt-0.5">৳${p.price.toFixed(2)} <span class="text-slate-400 font-medium">/ kg</span></p>
+                        <p class="text-[11px] sm:text-xs text-emerald-700 font-bold px-0.5 mt-0.5">৳${p.price.toFixed(2)} <span class="text-slate-400 font-medium">${priceUnitLabel}</span></p>
                     </div>
                     <div class="mt-2.5 sm:mt-3 flex items-center justify-between gap-1">
                         <button onclick="addBothToCart(${p.id})" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] sm:text-xs rounded-xl transition shadow flex items-center justify-center space-x-1">
                             <i class="fa-solid fa-plus text-[10px]"></i>
-                            <span>Add (1kg & 1${p.unit2})</span>
+                            <span>${addBtnLabel}</span>
                         </button>
                     </div>
                 `;
@@ -1966,7 +2020,7 @@
             });
         }
 
-        // Add both 1kg and 1 Combobox Unit to cart
+        // Add item to cart dynamically based on unit mode
         function addBothToCart(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) {
@@ -1974,23 +2028,28 @@
                 return;
             }
 
+            const isUnitOnly = isUnitOnlyMode(product.unit2);
             const kgPerBulk = product.kgPerBulk || 10;
             let existingItem = cart.find(item => item.id === productId);
 
-            let addKg = 1;
+            let addKg = isUnitOnly ? 0 : 1;
             let addBulk = 1;
 
             if (existingItem) {
-                if ((existingItem.qtyKg + addKg) > product.stockKg || (existingItem.qtyBulk + addBulk) > product.stockBulk) {
+                if ((!isUnitOnly && (existingItem.qtyKg + addKg) > product.stockKg) || (existingItem.qtyBulk + addBulk) > product.stockBulk) {
                     showToast(`Insufficient stock for ${product.name}!`, 'warning');
                     return;
                 }
-                existingItem.qtyKg = parseFloat((existingItem.qtyKg + addKg).toFixed(3));
+                existingItem.qtyKg = isUnitOnly ? 0 : parseFloat((existingItem.qtyKg + addKg).toFixed(3));
                 existingItem.qtyBulk = parseFloat((existingItem.qtyBulk + addBulk).toFixed(3));
             } else {
+                if ((!isUnitOnly && addKg > product.stockKg) || addBulk > product.stockBulk) {
+                    showToast(`Insufficient stock for ${product.name}!`, 'warning');
+                    return;
+                }
                 cart.push({
                     ...product,
-                    unit1: 'kg',
+                    unit1: isUnitOnly ? '' : 'kg',
                     unit2: product.unit2 || 'বস্তা',
                     qtyKg: addKg,
                     qtyBulk: addBulk,
@@ -2008,7 +2067,9 @@
             const product = products.find(p => p.id === productId);
             if (!item || !product) return;
 
-            if (field === 'kg') {
+            const isUnitOnly = isUnitOnlyMode(item.unit2);
+
+            if (field === 'kg' && !isUnitOnly) {
                 const newKg = item.qtyKg + delta;
                 if (newKg < 0) {
                     item.qtyKg = 0;
@@ -2030,7 +2091,7 @@
                 }
             }
 
-            if (item.qtyKg <= 0 && item.qtyBulk <= 0) {
+            if ((isUnitOnly && item.qtyBulk <= 0) || (!isUnitOnly && item.qtyKg <= 0 && item.qtyBulk <= 0)) {
                 removeFromCartCombi(productId);
             } else {
                 renderCart();
@@ -2045,7 +2106,7 @@
             const parsed = parseFloat(val);
             if (isNaN(parsed) || parsed < 0) return;
 
-            if (field === 'kg') {
+            if (field === 'kg' && !isUnitOnlyMode(item.unit2)) {
                 if (parsed > product.stockKg) {
                     showToast('Stock limit reached', 'warning');
                     return;
@@ -2065,6 +2126,12 @@
             const item = cart.find(i => i.id === productId);
             if (item) {
                 item.unit2 = newUnit;
+                if (isUnitOnlyMode(newUnit)) {
+                    item.qtyKg = 0;
+                    if (item.qtyBulk <= 0) item.qtyBulk = 1;
+                } else {
+                    if (item.qtyKg <= 0) item.qtyKg = 1;
+                }
                 renderCart();
             }
         }
@@ -2089,37 +2156,47 @@
                 mobileContainer.innerHTML = emptyHTML;
             } else {
                 const cartHTML = cart.map(item => {
-                    const totalItemPrice = item.price * item.qtyKg;
+                    const isUnitOnly = isUnitOnlyMode(item.unit2);
+                    const totalItemPrice = getItemLineTotal(item);
+                    const rateUnitText = isUnitOnly ? item.unit2 : 'kg';
+                    const subtotalLabel = isUnitOnly ? `Subtotal (${item.unit2} price):` : `Subtotal (Only kg price):`;
+
+                    const kgControlHTML = isUnitOnly ? '' : `
+                        <!-- Up/Down controls for Unit 1 (Kg - Price Added) -->
+                        <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 shadow-inner">
+                            <span class="text-xs font-bold text-slate-700">Weight (kg):</span>
+                            <div class="flex items-center space-x-1.5">
+                                <button onclick="updateCombinedCartQty(${item.id}, 'kg', -1)" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-black text-slate-700 flex items-center justify-center">-</button>
+                                <input type="number" step="0.1" value="${item.qtyKg}" onchange="setCombinedCartQty(${item.id}, 'kg', this.value)" 
+                                    class="w-14 text-center font-black text-xs bg-slate-50 border border-slate-200 py-1 rounded-lg focus:outline-none">
+                                <button onclick="updateCombinedCartQty(${item.id}, 'kg', 1)" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-black text-slate-700 flex items-center justify-center">+</button>
+                            </div>
+                        </div>
+                    `;
+
                     return `
                         <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2.5 shadow-sm">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <h5 class="font-bold text-slate-800 text-xs sm:text-sm">${item.name}</h5>
-                                    <span class="text-[11px] text-emerald-700 font-bold">Rate: ৳${item.price.toFixed(2)} / kg</span>
+                                    <span class="text-[11px] text-emerald-700 font-bold">Rate: ৳${item.price.toFixed(2)} / ${rateUnitText}</span>
                                 </div>
                                 <button onclick="removeFromCartCombi(${item.id})" class="text-slate-400 hover:text-rose-600 text-xs p-1 rounded-lg hover:bg-rose-50 transition">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </div>
 
-                            <!-- Up/Down controls for Unit 1 (Kg - Price Added) -->
-                            <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 shadow-inner">
-                                <span class="text-xs font-bold text-slate-700">Weight (kg):</span>
-                                <div class="flex items-center space-x-1.5">
-                                    <button onclick="updateCombinedCartQty(${item.id}, 'kg', -1)" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-black text-slate-700 flex items-center justify-center">-</button>
-                                    <input type="number" step="0.1" value="${item.qtyKg}" onchange="setCombinedCartQty(${item.id}, 'kg', this.value)" 
-                                        class="w-14 text-center font-black text-xs bg-slate-50 border border-slate-200 py-1 rounded-lg focus:outline-none">
-                                    <button onclick="updateCombinedCartQty(${item.id}, 'kg', 1)" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-black text-slate-700 flex items-center justify-center">+</button>
-                                </div>
-                            </div>
+                            ${kgControlHTML}
 
-                            <!-- Up/Down controls for Combobox Unit (বস্তা/কার্টুন/ট্রে/নেট) -->
+                            <!-- Up/Down controls for Combobox Unit (বস্তা/কার্টুন/ট্রে/নেট/pic/box) -->
                             <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 shadow-inner">
                                 <select onchange="changeItemComboboxUnit(${item.id}, this.value)" class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg p-1 focus:outline-none">
                                     <option value="বস্তা" ${item.unit2 === 'বস্তা' ? 'selected' : ''}>বস্তা</option>
                                     <option value="কার্টুন" ${item.unit2 === 'কার্টুন' ? 'selected' : ''}>কার্টুন</option>
                                     <option value="ট্রে" ${item.unit2 === 'ট্রে' ? 'selected' : ''}>ট্রে</option>
                                     <option value="নেট" ${item.unit2 === 'নেট' ? 'selected' : ''}>নেট</option>
+                                    <option value="pic" ${item.unit2 === 'pic' ? 'selected' : ''}>pic</option>
+                                    <option value="box" ${item.unit2 === 'box' ? 'selected' : ''}>box</option>
                                 </select>
                                 <div class="flex items-center space-x-1.5">
                                     <button onclick="updateCombinedCartQty(${item.id}, 'bulk', -1)" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-black text-slate-700 flex items-center justify-center">-</button>
@@ -2130,7 +2207,7 @@
                             </div>
 
                             <div class="flex justify-between items-center pt-1 border-t border-slate-200/60 font-black text-xs">
-                                <span class="text-slate-500">Subtotal (Only kg price):</span>
+                                <span class="text-slate-500">${subtotalLabel}</span>
                                 <span class="text-emerald-700 text-sm">৳${totalItemPrice.toFixed(2)}</span>
                             </div>
                         </div>
@@ -2154,10 +2231,14 @@
         function updateCalculations() {
             let subtotal = 0;
             let totalKg = 0;
+            let hasKgItems = false;
 
             cart.forEach(i => {
-                subtotal += (i.price * i.qtyKg);
-                totalKg += i.qtyKg;
+                subtotal += getItemLineTotal(i);
+                if (!isUnitOnlyMode(i.unit2)) {
+                    totalKg += i.qtyKg;
+                    hasKgItems = true;
+                }
             });
 
             const discountPercent = parseFloat(document.getElementById('cart-discount-input').value) || 0;
@@ -2167,6 +2248,16 @@
             const customer = getSelectedCustomer();
             const prevDue = customer.due || 0;
             const grandTotalPayable = billTotal + prevDue;
+
+            const weightRow = document.getElementById('cart-weight-row');
+            const mobileWeightRow = document.getElementById('mobile-cart-weight-row');
+            if (cart.length > 0 && !hasKgItems) {
+                if (weightRow) weightRow.classList.add('hidden');
+                if (mobileWeightRow) mobileWeightRow.classList.add('hidden');
+            } else {
+                if (weightRow) weightRow.classList.remove('hidden');
+                if (mobileWeightRow) mobileWeightRow.classList.remove('hidden');
+            }
 
             document.getElementById('cart-total-weight').innerText = `${totalKg.toFixed(2)} kg`;
             document.getElementById('cart-subtotal').innerText = `৳${subtotal.toFixed(2)}`;
@@ -2196,7 +2287,7 @@
             const cust = getSelectedCustomer();
             let subtotal = 0;
             cart.forEach(i => {
-                subtotal += (i.price * i.qtyKg);
+                subtotal += getItemLineTotal(i);
             });
 
             const discountPercent = parseFloat(document.getElementById('cart-discount-input').value) || 0;
@@ -2224,7 +2315,7 @@
 
             let subtotal = 0;
             cart.forEach(i => {
-                subtotal += (i.price * i.qtyKg);
+                subtotal += getItemLineTotal(i);
             });
 
             const discountPercent = parseFloat(document.getElementById('cart-discount-input').value) || 0;
@@ -2250,7 +2341,7 @@
 
             let subtotal = 0;
             cart.forEach(i => {
-                subtotal += (i.price * i.qtyKg);
+                subtotal += getItemLineTotal(i);
             });
 
             const discountPercent = parseFloat(document.getElementById('cart-discount-input').value) || 0;
@@ -2281,7 +2372,7 @@
 
             let subtotal = 0;
             cart.forEach(i => {
-                subtotal += (i.price * i.qtyKg);
+                subtotal += getItemLineTotal(i);
             });
 
             const discountPercent = parseFloat(document.getElementById('cart-discount-input').value) || 0;
@@ -2303,11 +2394,13 @@
                 return;
             }
 
-            // Dual Stock Reduction
+            // Dynamic Stock Reduction
             cart.forEach(item => {
                 const prod = products.find(p => p.id === item.id);
                 if (prod) {
-                    prod.stockKg = Math.max(0, parseFloat((prod.stockKg - item.qtyKg).toFixed(3)));
+                    if (!isUnitOnlyMode(item.unit2)) {
+                        prod.stockKg = Math.max(0, parseFloat((prod.stockKg - item.qtyKg).toFixed(3)));
+                    }
                     prod.stockBulk = Math.max(0, parseFloat((prod.stockBulk - item.qtyBulk).toFixed(3)));
                 }
             });
@@ -2395,34 +2488,44 @@
             }
 
             container.innerHTML = editingTxItems.map((item, index) => {
-                const itemTotal = item.price * (item.qtyKg || 0);
+                const isUnitOnly = isUnitOnlyMode(item.unit2);
+                const itemTotal = getItemLineTotal(item);
+                const rateUnitText = isUnitOnly ? item.unit2 : 'kg';
+                const subtotalText = isUnitOnly ? `Subtotal (${item.unit2} price):` : `Subtotal (kg price):`;
+
+                const kgEditHTML = isUnitOnly ? '' : `
+                    <div class="flex items-center space-x-1 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-700">kg:</span>
+                        <input type="number" step="0.1" value="${item.qtyKg || 0}" onchange="updateEditCombiQty(${index}, 'kg', this.value)" 
+                            class="w-16 text-center font-bold bg-white border border-slate-200 rounded-lg p-1 text-xs">
+                    </div>
+                `;
+
                 return `
                     <div class="bg-white p-3 rounded-2xl border border-slate-200 text-xs space-y-2 shadow-sm">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-slate-800">${item.name} <span class="text-emerald-700 text-[10px]">(Rate: ৳${item.price}/kg)</span></span>
+                            <span class="font-bold text-slate-800">${item.name} <span class="text-emerald-700 text-[10px]">(Rate: ৳${item.price}/${rateUnitText})</span></span>
                             <button type="button" onclick="removeEditTxItem(${index})" class="text-rose-500 hover:text-rose-700 p-1 rounded-lg hover:bg-rose-50 transition">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div class="flex items-center space-x-1 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
-                                <span class="text-[10px] font-bold text-slate-700">kg:</span>
-                                <input type="number" step="0.1" value="${item.qtyKg || 0}" onchange="updateEditCombiQty(${index}, 'kg', this.value)" 
-                                    class="w-16 text-center font-bold bg-white border border-slate-200 rounded-lg p-1 text-xs">
-                            </div>
+                        <div class="grid ${isUnitOnly ? 'grid-cols-1' : 'grid-cols-2'} gap-2">
+                            ${kgEditHTML}
                             <div class="flex items-center space-x-1 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
                                 <select onchange="updateEditComboboxUnit(${index}, this.value)" class="text-[10px] font-bold text-emerald-800 bg-white border border-slate-200 rounded p-1">
                                     <option value="বস্তা" ${item.unit2 === 'বস্তা' ? 'selected' : ''}>বস্তা</option>
                                     <option value="কার্টুন" ${item.unit2 === 'কার্টুন' ? 'selected' : ''}>কার্টুন</option>
                                     <option value="ট্রে" ${item.unit2 === 'ট্রে' ? 'selected' : ''}>ট্রে</option>
                                     <option value="নেট" ${item.unit2 === 'নেট' ? 'selected' : ''}>নেট</option>
+                                    <option value="pic" ${item.unit2 === 'pic' ? 'selected' : ''}>pic</option>
+                                    <option value="box" ${item.unit2 === 'box' ? 'selected' : ''}>box</option>
                                 </select>
                                 <input type="number" step="1" value="${item.qtyBulk || 0}" onchange="updateEditCombiQty(${index}, 'bulk', this.value)" 
                                     class="w-16 text-center font-bold bg-white border border-slate-200 rounded-lg p-1 text-xs">
                             </div>
                         </div>
                         <div class="flex justify-between text-[11px] font-black text-emerald-700 pt-1 border-t border-slate-100">
-                            <span>Subtotal (kg price):</span>
+                            <span>${subtotalText}</span>
                             <span>৳${itemTotal.toFixed(2)}</span>
                         </div>
                     </div>
@@ -2431,7 +2534,7 @@
 
             let subtotal = 0;
             editingTxItems.forEach(i => {
-                subtotal += (i.price * (i.qtyKg || 0));
+                subtotal += getItemLineTotal(i);
             });
 
             document.getElementById('edit-tx-bill-total').value = subtotal.toFixed(2);
@@ -2449,6 +2552,16 @@
 
         function updateEditComboboxUnit(index, unit) {
             editingTxItems[index].unit2 = unit;
+            if (isUnitOnlyMode(unit)) {
+                editingTxItems[index].qtyKg = 0;
+                if (!editingTxItems[index].qtyBulk || editingTxItems[index].qtyBulk <= 0) {
+                    editingTxItems[index].qtyBulk = 1;
+                }
+            } else {
+                if (!editingTxItems[index].qtyKg || editingTxItems[index].qtyKg <= 0) {
+                    editingTxItems[index].qtyKg = 1;
+                }
+            }
             renderEditTxItems();
         }
 
@@ -2459,7 +2572,10 @@
 
         function populateEditAddItemDropdown() {
             const select = document.getElementById('edit-add-item-select');
-            select.innerHTML = products.map(p => `<option value="${p.id}">${p.name} (৳${p.price}/kg)</option>`).join('');
+            select.innerHTML = products.map(p => {
+                const unitLabel = isUnitOnlyMode(p.unit2) ? p.unit2 : 'kg';
+                return `<option value="${p.id}">${p.name} (৳${p.price}/${unitLabel})</option>`;
+            }).join('');
         }
 
         function addEditTxItem() {
@@ -2467,12 +2583,19 @@
             const prod = products.find(p => p.id === selectId);
             if (!prod) return;
 
+            const isUnitOnly = isUnitOnlyMode(prod.unit2);
             const existing = editingTxItems.find(i => i.id === prod.id);
             if (existing) {
-                existing.qtyKg += 1;
+                if (!isUnitOnly) existing.qtyKg += 1;
                 existing.qtyBulk += 1;
             } else {
-                editingTxItems.push({ ...prod, unit1: 'kg', unit2: prod.unit2 || 'বস্তা', qtyKg: 1, qtyBulk: 1 });
+                editingTxItems.push({
+                    ...prod,
+                    unit1: isUnitOnly ? '' : 'kg',
+                    unit2: prod.unit2 || 'বস্তা',
+                    qtyKg: isUnitOnly ? 0 : 1,
+                    qtyBulk: 1
+                });
             }
             renderEditTxItems();
         }
@@ -2503,7 +2626,7 @@
             const order = salesHistory[orderIdx];
             let newBillTotal = 0;
             editingTxItems.forEach(i => {
-                newBillTotal += (i.price * (i.qtyKg || 0));
+                newBillTotal += getItemLineTotal(i);
             });
 
             const newPaid = parseFloat(document.getElementById('edit-tx-paid-amount').value) || 0;
@@ -2550,7 +2673,9 @@
                     order.items.forEach(item => {
                         const prod = products.find(p => p.id === item.id);
                         if (prod && item.unit2 !== 'payment') {
-                            prod.stockKg = parseFloat(((prod.stockKg || 0) + (item.qtyKg || 0)).toFixed(3));
+                            if (!isUnitOnlyMode(item.unit2)) {
+                                prod.stockKg = parseFloat(((prod.stockKg || 0) + (item.qtyKg || 0)).toFixed(3));
+                            }
                             prod.stockBulk = parseFloat(((prod.stockBulk || 0) + (item.qtyBulk || 0)).toFixed(3));
                         }
                     });
@@ -2609,11 +2734,15 @@
 
             const tbody = document.getElementById('receipt-items-tbody');
             tbody.innerHTML = order.items.map(i => {
-                const lineAmt = i.price * (i.qtyKg || 0);
+                const isUnitOnly = isUnitOnlyMode(i.unit2);
+                const lineAmt = getItemLineTotal(i);
+                const qtyDisplay = isUnitOnly
+                    ? `${i.qtyBulk || 0} ${i.unit2 || ''}`
+                    : `${i.qtyKg || 0} kg & ${i.qtyBulk || 0} ${i.unit2 || ''}`;
                 return `
                     <tr>
                         <td class="py-1.5">${i.name}</td>
-                        <td class="text-center py-1.5">${i.qtyKg || 0} kg & ${i.qtyBulk || 0} ${i.unit2 || ''}</td>
+                        <td class="text-center py-1.5">${qtyDisplay}</td>
                         <td class="text-right py-1.5">৳${lineAmt.toFixed(2)}</td>
                     </tr>
                 `;
@@ -2653,22 +2782,28 @@
                 return;
             }
 
-            tbody.innerHTML = filtered.map(p => `
-                <tr class="hover:bg-emerald-50/45 transition border-b border-slate-100">
-                    <td class="p-4 flex items-center space-x-3.5">
-                        <img src="${p.image || 'https://placehold.co/100x100?text=Item'}" class="w-11 h-11 rounded-2xl object-cover bg-slate-100 border-2 border-emerald-500/20 shadow-sm" onerror="this.src='https://placehold.co/400x300?text=Item'">
-                        <span class="font-bold text-slate-800 text-sm">${p.name}</span>
-                    </td>
-                    <td class="p-4 text-xs font-bold text-slate-600">${p.category}</td>
-                    <td class="p-4 font-black text-emerald-700 text-sm">৳${p.price.toFixed(2)} <span class="text-slate-400 font-medium text-xs">/ kg</span></td>
-                    <td class="p-4 font-black text-slate-800 text-sm">${p.stockBulk} ${p.unit2}</td>
-                    <td class="p-4 font-black text-slate-800 text-sm">${p.stockKg} kg</td>
-                    <td class="p-4 text-center">
-                        <button onclick="openEditProductModalWithPermission(${p.id})" class="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition"><i class="fa-solid fa-pen-to-square"></i> <span class="text-[9px]">🔒</span></button>
-                        <button onclick="deleteProduct(${p.id})" class="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition"><i class="fa-solid fa-trash-can"></i> <span class="text-[9px]">🔒</span></button>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = filtered.map(p => {
+                const isUnitOnly = isUnitOnlyMode(p.unit2);
+                const rateUnitLabel = isUnitOnly ? `/ ${p.unit2}` : `/ kg`;
+                const kgStockCell = isUnitOnly ? `<span class="text-slate-400 font-medium text-xs">N/A (${p.unit2})</span>` : `${p.stockKg} kg`;
+
+                return `
+                    <tr class="hover:bg-emerald-50/45 transition border-b border-slate-100">
+                        <td class="p-4 flex items-center space-x-3.5">
+                            <img src="${p.image || 'https://placehold.co/100x100?text=Item'}" class="w-11 h-11 rounded-2xl object-cover bg-slate-100 border-2 border-emerald-500/20 shadow-sm" onerror="this.src='https://placehold.co/400x300?text=Item'">
+                            <span class="font-bold text-slate-800 text-sm">${p.name}</span>
+                        </td>
+                        <td class="p-4 text-xs font-bold text-slate-600">${p.category}</td>
+                        <td class="p-4 font-black text-emerald-700 text-sm">৳${p.price.toFixed(2)} <span class="text-slate-400 font-medium text-xs">${rateUnitLabel}</span></td>
+                        <td class="p-4 font-black text-slate-800 text-sm">${p.stockBulk} ${p.unit2}</td>
+                        <td class="p-4 font-black text-slate-800 text-sm">${kgStockCell}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="openEditProductModalWithPermission(${p.id})" class="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition"><i class="fa-solid fa-pen-to-square"></i> <span class="text-[9px]">🔒</span></button>
+                            <button onclick="deleteProduct(${p.id})" class="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition"><i class="fa-solid fa-trash-can"></i> <span class="text-[9px]">🔒</span></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function openAddProductModal() {
@@ -2676,6 +2811,7 @@
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
             document.getElementById('prod-img-preview').src = 'https://placehold.co/100x100?text=Item';
+            toggleProductUnitFields();
             document.getElementById('product-modal').classList.remove('hidden');
         }
 
@@ -2694,6 +2830,7 @@
             document.getElementById('prod-stock-kg').value = product.stockKg;
             document.getElementById('prod-image').value = product.image || '';
             document.getElementById('prod-img-preview').src = product.image || 'https://placehold.co/100x100?text=Item';
+            toggleProductUnitFields();
 
             document.getElementById('product-modal').classList.remove('hidden');
         }
@@ -2708,19 +2845,20 @@
             const name = document.getElementById('prod-name').value.trim();
             const category = document.getElementById('prod-category').value;
             const unit2 = document.getElementById('prod-unit2').value;
-            const kgPerBulk = parseFloat(document.getElementById('prod-kg-per-bulk').value) || 10;
+            const isUnitOnly = isUnitOnlyMode(unit2);
+            const kgPerBulk = isUnitOnly ? 1 : (parseFloat(document.getElementById('prod-kg-per-bulk').value) || 10);
             const price = parseFloat(document.getElementById('prod-price').value);
             const stockBulk = parseFloat(document.getElementById('prod-stock-bulk').value);
-            const stockKg = parseFloat(document.getElementById('prod-stock-kg').value);
+            const stockKg = isUnitOnly ? 0 : (parseFloat(document.getElementById('prod-stock-kg').value) || 0);
             const image = document.getElementById('prod-image').value.trim();
 
             if (id) {
                 const idx = products.findIndex(p => p.id === parseInt(id));
                 if (idx !== -1) {
-                    products[idx] = { ...products[idx], name, category, unit1: 'kg', unit2, price, stockBulk, stockKg, kgPerBulk, image };
+                    products[idx] = { ...products[idx], name, category, unit1: isUnitOnly ? '' : 'kg', unit2, price, stockBulk, stockKg, kgPerBulk, image };
                 }
             } else {
-                products.push({ id: Date.now(), name, category, unit1: 'kg', unit2, price, stockBulk, stockKg, kgPerBulk, image });
+                products.push({ id: Date.now(), name, category, unit1: isUnitOnly ? '' : 'kg', unit2, price, stockBulk, stockKg, kgPerBulk, image });
             }
 
             saveData();
