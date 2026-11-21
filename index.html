@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,7 +91,7 @@
                     <i class="fa-solid fa-lock text-emerald-200"></i>
                 </div>
                 <h2 id="login-company-title" class="text-xl sm:text-2xl font-black tracking-tight">POS Login</h2>
-                <p class="text-xs text-emerald-100/80 font-medium">Enter Admin credentials to access system</p>
+                <p class="text-xs text-emerald-100/80 font-medium">Enter Operator credentials to access system</p>
             </div>
             
             <form onsubmit="handleLogin(event)" class="p-5 sm:p-8 space-y-4 sm:space-y-5">
@@ -91,7 +99,7 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Username / ID</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"><i class="fa-solid fa-user"></i></span>
-                        <input type="text" id="login-user" required placeholder="Username" 
+                        <input type="text" id="login-user" required placeholder="Username (e.g. Admin)" 
                             class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium transition">
                     </div>
                 </div>
@@ -138,6 +146,7 @@
                 <div class="hidden lg:flex flex-col text-right text-xs text-emerald-200 border-r border-emerald-700/60 pr-3.5">
                     <span id="current-date" class="font-bold"></span>
                     <span id="current-time" class="text-[11px] text-emerald-300/80"></span>
+                    <span class="text-[10px] text-amber-300 font-bold mt-0.5">User: <span id="active-user-badge">Guest</span></span>
                 </div>
                 
                 <div class="flex bg-black/20 backdrop-blur-md rounded-2xl p-1 sm:p-1.5 border border-emerald-700/50 flex-nowrap overflow-x-auto max-w-[calc(100vw-180px)] sm:max-w-none scrollbar-none gap-1 shadow-inner">
@@ -155,6 +164,9 @@
                     </button>
                     <button onclick="switchViewWithPermission('dashboard')" id="nav-dash-btn" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-emerald-200 hover:text-white hover:bg-white/10 transition whitespace-nowrap">
                         <i class="fa-solid fa-chart-line mr-1"></i> Analytics & Ledger 🔒
+                    </button>
+                    <button onclick="switchViewWithPermission('usage')" id="nav-usage-btn" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-emerald-200 hover:text-white hover:bg-white/10 transition whitespace-nowrap">
+                        <i class="fa-solid fa-user-check mr-1"></i> Users & Logs 🔒
                     </button>
                     <button onclick="openSettingsWithPermission()" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-amber-200 hover:text-white bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 transition shadow-sm whitespace-nowrap" title="Company Settings">
                         <i class="fa-solid fa-gears mr-1"></i> Settings
@@ -457,7 +469,6 @@
                             <option value="">All Customers</option>
                         </select>
                         
-                        <!-- Date to Date Filter Inputs -->
                         <div class="flex items-center space-x-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-bold">
                             <span class="text-slate-400">From:</span>
                             <input type="date" id="ledger-filter-start-date" onchange="renderSalesHistory()" class="bg-transparent focus:outline-none p-1 font-bold text-slate-700">
@@ -491,6 +502,111 @@
                         </thead>
                         <tbody id="sales-history-tbody" class="divide-y divide-slate-100 text-sm"></tbody>
                         <tfoot id="sales-history-tfoot" class="bg-slate-100/80 font-black text-slate-900 border-t-2 border-slate-300"></tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- USERS & USAGE AUDIT VIEW -->
+        <div id="view-usage" class="hidden space-y-4 sm:space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white/90 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200/60 flex items-center space-x-4">
+                    <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-3.5 sm:p-4 rounded-2xl text-xl sm:text-2xl shadow-lg shadow-emerald-500/30">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Operators Seen (Browser)</p>
+                        <h3 id="stat-seen-operators" class="text-xl sm:text-2xl font-black text-slate-800 mt-0.5">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white/90 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200/60 flex items-center space-x-4">
+                    <div class="bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-3.5 sm:p-4 rounded-2xl text-xl sm:text-2xl shadow-lg shadow-blue-500/30">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">App Opens (This Device)</p>
+                        <h3 id="stat-local-visits" class="text-xl sm:text-2xl font-black text-slate-800 mt-0.5">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white/90 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200/60 flex items-center space-x-4">
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-3.5 sm:p-4 rounded-2xl text-xl sm:text-2xl shadow-lg shadow-amber-500/30">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Recorded Actions</p>
+                        <h3 id="stat-total-logs" class="text-xl sm:text-2xl font-black text-slate-800 mt-0.5">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white/90 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200/60 flex items-center space-x-4">
+                    <div class="bg-gradient-to-br from-purple-500 to-pink-600 text-white p-3.5 sm:p-4 rounded-2xl text-xl sm:text-2xl shadow-lg shadow-purple-500/30">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Global Analytics</p>
+                        <h3 id="stat-ga-status" class="text-sm sm:text-base font-black text-slate-800 mt-1">Not Configured</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Named Operator Account -->
+            <div class="bg-white/90 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200/60 space-y-4">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-black text-slate-800 tracking-tight">Operator Accounts (Identify Who Logs In)</h2>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">Create named logins for staff/cashiers so every sale, due payment, or edit is tied to a specific user.</p>
+                </div>
+
+                <form onsubmit="addOperatorAccount(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                    <input type="text" id="new-op-username" required placeholder="Username (e.g. Cashier1)" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <input type="text" id="new-op-role" placeholder="Role (e.g. Cashier)" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <input type="password" id="new-op-password" required placeholder="Password" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <button type="submit" class="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-xs rounded-2xl shadow transition">
+                        <i class="fa-solid fa-user-plus mr-1.5"></i> Add Operator
+                    </button>
+                </form>
+
+                <div class="overflow-x-auto pt-2">
+                    <table class="w-full text-left border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="bg-slate-50/80 text-slate-500 text-xs uppercase font-bold tracking-wider border-b border-slate-200/80">
+                                <th class="p-3">Operator</th>
+                                <th class="p-3">Role</th>
+                                <th class="p-3">Logins on This Browser</th>
+                                <th class="p-3">Last Seen</th>
+                                <th class="p-3 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operators-tbody" class="divide-y divide-slate-100 text-xs"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Activity Audit Log -->
+            <div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200/60 overflow-hidden">
+                <div class="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h3 class="font-black text-slate-800 text-lg tracking-tight">User Activity & Login Audit Log</h3>
+                        <p class="text-xs text-slate-500 font-medium">Shows who performed actions on this browser/device</p>
+                    </div>
+                    <button onclick="clearActivityLogs()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition border border-rose-200">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Clear Logs
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[650px]">
+                        <thead>
+                            <tr class="bg-slate-50/80 text-slate-500 text-xs uppercase font-bold tracking-wider border-b border-slate-200/80">
+                                <th class="p-4">Date & Time</th>
+                                <th class="p-4">User / Operator</th>
+                                <th class="p-4">Action</th>
+                                <th class="p-4">Details</th>
+                                <th class="p-4">Device / Platform</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activity-logs-tbody" class="divide-y divide-slate-100 text-xs"></tbody>
                     </table>
                 </div>
             </div>
@@ -1214,6 +1330,9 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // Optional: Set your Google Analytics 4 Measurement ID (e.g., 'G-XXXXXXXXXX') to track visitors across all devices
+        window.GA_MEASUREMENT_ID = '';
+
         const defaultCompanyInfo = {
             name: "Shop Name",
             sub: "POS, Ledger & Due Manager",
@@ -1227,6 +1346,10 @@
             logo: ""
         };
 
+        const defaultOperators = [
+            { id: 1, username: "Admin", role: "Administrator", password: "12345", loginCount: 0, lastSeen: "-" }
+        ];
+
         const defaultProducts = [];
         const defaultCustomers = [];
         const defaultStaff = [];
@@ -1236,18 +1359,56 @@
         let customers = JSON.parse(localStorage.getItem('veggie_pos_customers')) || defaultCustomers;
         let staffList = JSON.parse(localStorage.getItem('veggie_pos_staff')) || defaultStaff;
         let salesHistory = JSON.parse(localStorage.getItem('veggie_pos_history')) || [];
-        
+        let operators = JSON.parse(localStorage.getItem('veggie_pos_operators')) || defaultOperators;
+        let activityLogs = JSON.parse(localStorage.getItem('veggie_pos_activity_logs')) || [];
+        let localVisits = parseInt(localStorage.getItem('veggie_pos_local_visits') || '0', 10);
+
+        if (!Array.isArray(operators) || operators.length === 0) {
+            operators = [...defaultOperators];
+        }
+
+        let currentOperator = localStorage.getItem('veggie_pos_current_user') || '';
         let cart = [];
         let selectedCustomerId = 0;
         let activeCategory = 'All';
         let searchQuery = '';
 
-        // Helper: check if unit is piece/box based (no kg)
+        function trackEvent(eventName, params = {}) {
+            if (typeof window.gtag === 'function' && window.GA_MEASUREMENT_ID) {
+                window.gtag('event', eventName, params);
+            }
+        }
+
+        function getDeviceSummary() {
+            const ua = navigator.userAgent || '';
+            const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+            const type = isMobile ? 'Mobile/Tablet' : 'Desktop/Laptop';
+            const platform = navigator.platform || 'Browser';
+            return `${type} (${platform})`;
+        }
+
+        function logUserActivity(action, details = '', explicitUser = null) {
+            const actor = explicitUser || currentOperator || 'Unknown';
+            const now = new Date();
+            activityLogs.unshift({
+                id: 'LOG-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                timestamp: formatDateTimeCustom(now),
+                user: actor,
+                action: action,
+                details: details,
+                device: getDeviceSummary()
+            });
+            if (activityLogs.length > 500) {
+                activityLogs = activityLogs.slice(0, 500);
+            }
+            localStorage.setItem('veggie_pos_activity_logs', JSON.stringify(activityLogs));
+            trackEvent('pos_activity', { action, actor });
+        }
+
         function isUnitOnlyMode(unit) {
             return unit === 'pic' || unit === 'box';
         }
 
-        // Helper: dynamic item line price calculation
         function getItemLineTotal(item) {
             if (isUnitOnlyMode(item.unit2)) {
                 return (item.price || 0) * (item.qtyBulk || 0);
@@ -1255,7 +1416,6 @@
             return (item.price || 0) * (item.qtyKg || 0);
         }
 
-        // Helper: toggle kg fields in Add/Edit Product Modal
         function toggleProductUnitFields() {
             const unit2 = document.getElementById('prod-unit2').value;
             const isUnitOnly = isUnitOnlyMode(unit2);
@@ -1288,7 +1448,12 @@
         }
 
         window.onload = function() {
+            localVisits += 1;
+            localStorage.setItem('veggie_pos_local_visits', String(localVisits));
+            trackEvent('app_open', { local_visits: localVisits });
+
             checkAuthStatus();
+            updateActiveUserBadge();
             updateClock();
             setInterval(updateClock, 1000);
             applyCompanyBranding();
@@ -1301,6 +1466,7 @@
             renderStaffTable();
             renderInventoryTable();
             updateDashboardStats();
+            renderUsageView();
         };
 
         function formatDateTimeCustom(dateObj = new Date()) {
@@ -1318,10 +1484,15 @@
             return `${day}/${month}/${year} ${strHours}:${minutes} ${ampm}`;
         }
 
+        function getAdminPasscode() {
+            const adminOp = operators.find(op => op.username.toLowerCase() === 'admin');
+            return adminOp ? adminOp.password : '12345';
+        }
+
         function verifyPermissionPassword(actionName) {
             const pass = prompt(`🔐 Enter Admin Password to access: "${actionName}" (*****)`);
             if (pass === null) return false;
-            if (pass.trim() === '12345') {
+            if (pass.trim() === getAdminPasscode()) {
                 return true;
             } else {
                 showToast('Incorrect permission password!', 'error');
@@ -1334,6 +1505,7 @@
             if (view === 'customers') actionName = 'Customer Management & Ledger';
             else if (view === 'products') actionName = 'Item Inventory';
             else if (view === 'dashboard') actionName = 'Sales Transactions Ledger';
+            else if (view === 'usage') actionName = 'Users & Activity Logs';
 
             if (verifyPermissionPassword(actionName)) {
                 switchView(view);
@@ -1400,9 +1572,16 @@
             }
         }
 
+        function updateActiveUserBadge() {
+            const badge = document.getElementById('active-user-badge');
+            if (badge) {
+                badge.innerText = currentOperator || 'Guest';
+            }
+        }
+
         function checkAuthStatus() {
             const isLoggedIn = localStorage.getItem('veggie_pos_logged_in');
-            if (isLoggedIn === 'true') {
+            if (isLoggedIn === 'true' && currentOperator) {
                 document.getElementById('login-modal').classList.add('hidden');
             } else {
                 document.getElementById('login-modal').classList.remove('hidden');
@@ -1415,20 +1594,155 @@
             const pass = document.getElementById('login-pass').value.trim();
             const errDiv = document.getElementById('login-error');
 
-            if (user === 'Admin' && pass === '12345') {
+            const matchedOp = operators.find(
+                op => op.username.toLowerCase() === user.toLowerCase() && op.password === pass
+            );
+
+            if (matchedOp) {
+                currentOperator = matchedOp.username;
+                matchedOp.loginCount = (matchedOp.loginCount || 0) + 1;
+                matchedOp.lastSeen = formatDateTimeCustom(new Date());
+
                 localStorage.setItem('veggie_pos_logged_in', 'true');
+                localStorage.setItem('veggie_pos_current_user', currentOperator);
+                localStorage.setItem('veggie_pos_operators', JSON.stringify(operators));
+
+                updateActiveUserBadge();
                 document.getElementById('login-modal').classList.add('hidden');
                 errDiv.classList.add('hidden');
-                showToast('Successfully logged in as Admin!');
+                document.getElementById('login-pass').value = '';
+
+                logUserActivity('Login', `Signed in (${matchedOp.role})`, currentOperator);
+                renderUsageView();
+                showToast(`Successfully logged in as ${currentOperator}!`);
             } else {
+                logUserActivity('Failed Login Attempt', `Tried username: "${user}"`, user || 'Unknown');
                 errDiv.classList.remove('hidden');
             }
         }
 
         function logoutSystem() {
             if (confirm('Are you sure you want to log out of the system?')) {
+                logUserActivity('Logout', `Signed out`, currentOperator);
                 localStorage.removeItem('veggie_pos_logged_in');
+                localStorage.removeItem('veggie_pos_current_user');
+                currentOperator = '';
+                updateActiveUserBadge();
                 checkAuthStatus();
+            }
+        }
+
+        // OPERATOR ACCOUNTS & USAGE LOGS
+        function addOperatorAccount(e) {
+            e.preventDefault();
+            const username = document.getElementById('new-op-username').value.trim();
+            const role = document.getElementById('new-op-role').value.trim() || 'Operator';
+            const password = document.getElementById('new-op-password').value.trim();
+
+            if (!username || !password) return;
+
+            const exists = operators.some(op => op.username.toLowerCase() === username.toLowerCase());
+            if (exists) {
+                showToast('An operator with this username already exists!', 'error');
+                return;
+            }
+
+            operators.push({
+                id: Date.now(),
+                username,
+                role,
+                password,
+                loginCount: 0,
+                lastSeen: '-'
+            });
+
+            localStorage.setItem('veggie_pos_operators', JSON.stringify(operators));
+            logUserActivity('Operator Added', `Created operator "${username}" (${role})`);
+
+            document.getElementById('new-op-username').value = '';
+            document.getElementById('new-op-role').value = '';
+            document.getElementById('new-op-password').value = '';
+
+            renderUsageView();
+            showToast(`Operator "${username}" added!`);
+        }
+
+        function deleteOperatorAccount(id) {
+            const op = operators.find(o => o.id === id);
+            if (!op) return;
+            if (op.username.toLowerCase() === 'admin') {
+                showToast('Default Admin account cannot be deleted.', 'warning');
+                return;
+            }
+            if (confirm(`Remove operator account "${op.username}"?`)) {
+                operators = operators.filter(o => o.id !== id);
+                localStorage.setItem('veggie_pos_operators', JSON.stringify(operators));
+                logUserActivity('Operator Deleted', `Removed operator "${op.username}"`);
+                renderUsageView();
+                showToast('Operator account removed', 'info');
+            }
+        }
+
+        function clearActivityLogs() {
+            if (confirm('Clear all recorded user activity logs on this browser?')) {
+                activityLogs = [];
+                localStorage.setItem('veggie_pos_activity_logs', JSON.stringify(activityLogs));
+                renderUsageView();
+                showToast('Activity logs cleared', 'info');
+            }
+        }
+
+        function renderUsageView() {
+            const seenUsersSet = new Set(activityLogs.map(l => l.user).filter(u => u && u !== 'Unknown'));
+            operators.forEach(op => {
+                if ((op.loginCount || 0) > 0) seenUsersSet.add(op.username);
+            });
+
+            const seenEl = document.getElementById('stat-seen-operators');
+            const visitsEl = document.getElementById('stat-local-visits');
+            const logsCountEl = document.getElementById('stat-total-logs');
+            const gaEl = document.getElementById('stat-ga-status');
+
+            if (seenEl) seenEl.innerText = seenUsersSet.size;
+            if (visitsEl) visitsEl.innerText = localVisits;
+            if (logsCountEl) logsCountEl.innerText = activityLogs.length;
+            if (gaEl) {
+                gaEl.innerText = window.GA_MEASUREMENT_ID ? `Active (${window.GA_MEASUREMENT_ID})` : 'Not Configured';
+            }
+
+            const opsTbody = document.getElementById('operators-tbody');
+            if (opsTbody) {
+                opsTbody.innerHTML = operators.map(op => `
+                    <tr class="hover:bg-emerald-50/40">
+                        <td class="p-3 font-black text-slate-800">${op.username}</td>
+                        <td class="p-3 text-slate-600 font-medium">${op.role || 'Operator'}</td>
+                        <td class="p-3 font-bold text-emerald-700">${op.loginCount || 0}</td>
+                        <td class="p-3 text-slate-500">${op.lastSeen || '-'}</td>
+                        <td class="p-3 text-center">
+                            ${op.username.toLowerCase() === 'admin'
+                                ? '<span class="text-[10px] font-bold text-slate-400">Primary</span>'
+                                : `<button onclick="deleteOperatorAccount(${op.id})" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg font-bold transition"><i class="fa-solid fa-trash-can"></i></button>`
+                            }
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            const logsTbody = document.getElementById('activity-logs-tbody');
+            if (logsTbody) {
+                if (activityLogs.length === 0) {
+                    logsTbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400 font-medium">No activity logs recorded yet.</td></tr>`;
+                    return;
+                }
+                logsTbody.innerHTML = activityLogs.map(log => `
+                    <tr class="hover:bg-emerald-50/40">
+                        <td class="p-4 text-slate-500 font-medium whitespace-nowrap">${log.timestamp}</td>
+                        <td class="p-4 font-black text-emerald-800 whitespace-nowrap">${log.user}</td>
+                        <td class="p-4 font-bold text-slate-800 whitespace-nowrap">${log.action}</td>
+                        <td class="p-4 text-slate-600">${log.details || '-'}</td>
+                        <td class="p-4 text-slate-400 text-[11px] whitespace-nowrap">${log.device || '-'}</td>
+                    </tr>
+                `).join('');
             }
         }
 
@@ -1501,6 +1815,8 @@
             localStorage.setItem('veggie_pos_company', JSON.stringify(companyInfo));
             applyCompanyBranding();
             closeCompanySettingsModal();
+            logUserActivity('Company Settings Updated', `Updated shop profile: ${companyInfo.name}`);
+            renderUsageView();
             showToast('Company settings updated successfully!');
         }
 
@@ -1539,6 +1855,7 @@
             document.getElementById('view-staff').classList.add('hidden');
             document.getElementById('view-products').classList.add('hidden');
             document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-usage').classList.add('hidden');
 
             const inactiveClass = "px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-emerald-200 hover:text-white hover:bg-white/10 transition whitespace-nowrap";
             const activeClass = "px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 text-white shadow-md transition whitespace-nowrap";
@@ -1548,6 +1865,7 @@
             document.getElementById('nav-staff-btn').className = inactiveClass;
             document.getElementById('nav-prod-btn').className = inactiveClass;
             document.getElementById('nav-dash-btn').className = inactiveClass;
+            document.getElementById('nav-usage-btn').className = inactiveClass;
 
             if (view === 'pos') {
                 document.getElementById('view-pos').classList.remove('hidden');
@@ -1571,6 +1889,10 @@
                 updateDashboardStats();
                 populateLedgerCustomerFilter();
                 renderSalesHistory();
+            } else if (view === 'usage') {
+                document.getElementById('view-usage').classList.remove('hidden');
+                document.getElementById('nav-usage-btn').className = activeClass;
+                renderUsageView();
             }
         }
 
@@ -1714,11 +2036,13 @@
                 const idx = customers.findIndex(c => c.id === parseInt(id));
                 if (idx !== -1) {
                     customers[idx] = { ...customers[idx], name, phone, address, due, image };
+                    logUserActivity('Customer Updated', `Updated customer "${name}"`);
                     showToast(`Updated customer ${name}`);
                 }
             } else {
                 const newCust = { id: Date.now(), name, phone, address, due, image };
                 customers.push(newCust);
+                logUserActivity('Customer Added', `Added customer "${name}"`);
                 showToast(`Added customer ${name}`);
             }
 
@@ -1739,6 +2063,7 @@
                     customers = customers.filter(c => c.id !== id);
                     if (selectedCustomerId === id) selectedCustomerId = 0;
                     saveData();
+                    logUserActivity('Customer Deleted', `Deleted customer "${cust.name}"`);
                     renderCustomerDropdown();
                     populateLedgerCustomerFilter();
                     renderCustomerTable();
@@ -1802,6 +2127,7 @@
 
             salesHistory.unshift(paymentOrder);
             saveData();
+            logUserActivity('Due Collected', `${txId}: Received ৳${amount.toFixed(2)} from ${cust.name}`);
 
             closeDuePaymentModal();
             renderCustomerDropdown();
@@ -1920,11 +2246,13 @@
                 const idx = staffList.findIndex(s => s.id === parseInt(id));
                 if (idx !== -1) {
                     staffList[idx] = { ...staffList[idx], name, role, status, phone, email, address, notes, image };
+                    logUserActivity('Contact Updated', `Updated "${name}" (${role})`);
                     showToast(`Updated contact: ${name}`);
                 }
             } else {
                 const newStaff = { id: Date.now(), name, role, status, phone, email, address, notes, image };
                 staffList.push(newStaff);
+                logUserActivity('Contact Added', `Added "${name}" (${role})`);
                 showToast(`Added new personnel: ${name}`);
             }
 
@@ -1941,6 +2269,7 @@
                 if (confirm(`Remove contact profile for "${staff.name}"?`)) {
                     staffList = staffList.filter(s => s.id !== id);
                     saveData();
+                    logUserActivity('Contact Deleted', `Removed "${staff.name}"`);
                     renderStaffTable();
                     showToast('Contact removed', 'info');
                 }
@@ -2020,7 +2349,6 @@
             });
         }
 
-        // Add item to cart dynamically based on unit mode
         function addBothToCart(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) {
@@ -2061,7 +2389,6 @@
             showToast(`Added ${product.name} to cart`);
         }
 
-        // Functions to Up/Down quantities independently
         function updateCombinedCartQty(productId, field, delta) {
             const item = cart.find(i => i.id === productId);
             const product = products.find(p => p.id === productId);
@@ -2162,7 +2489,6 @@
                     const subtotalLabel = isUnitOnly ? `Subtotal (${item.unit2} price):` : `Subtotal (Only kg price):`;
 
                     const kgControlHTML = isUnitOnly ? '' : `
-                        <!-- Up/Down controls for Unit 1 (Kg - Price Added) -->
                         <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 shadow-inner">
                             <span class="text-xs font-bold text-slate-700">Weight (kg):</span>
                             <div class="flex items-center space-x-1.5">
@@ -2188,7 +2514,6 @@
 
                             ${kgControlHTML}
 
-                            <!-- Up/Down controls for Combobox Unit (বস্তা/কার্টুন/ট্রে/নেট/pic/box) -->
                             <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 shadow-inner">
                                 <select onchange="changeItemComboboxUnit(${item.id}, this.value)" class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg p-1 focus:outline-none">
                                     <option value="বস্তা" ${item.unit2 === 'বস্তা' ? 'selected' : ''}>বস্তা</option>
@@ -2394,7 +2719,6 @@
                 return;
             }
 
-            // Dynamic Stock Reduction
             cart.forEach(item => {
                 const prod = products.find(p => p.id === item.id);
                 if (prod) {
@@ -2435,6 +2759,7 @@
 
             salesHistory.unshift(order);
             saveData();
+            logUserActivity('Sale Completed', `${txId}: Bill ৳${billTotal.toFixed(2)}, Paid ৳${paidAmount.toFixed(2)} (${cust.name})`);
 
             closeCheckoutModal();
             document.getElementById('checkout-paid-input').value = '';
@@ -2655,6 +2980,7 @@
             };
 
             saveData();
+            logUserActivity('Transaction Edited', `Edited ${order.id}: New Bill ৳${newBillTotal.toFixed(2)}, Paid ৳${newPaid.toFixed(2)}`);
             closeEditTxModal();
             renderSalesHistory();
             renderCustomerTable();
@@ -2689,6 +3015,7 @@
 
                     salesHistory.splice(orderIdx, 1);
                     saveData();
+                    logUserActivity('Transaction Deleted', `Deleted ${order.id}`);
 
                     renderSalesHistory();
                     renderInventoryTable();
@@ -2856,9 +3183,11 @@
                 const idx = products.findIndex(p => p.id === parseInt(id));
                 if (idx !== -1) {
                     products[idx] = { ...products[idx], name, category, unit1: isUnitOnly ? '' : 'kg', unit2, price, stockBulk, stockKg, kgPerBulk, image };
+                    logUserActivity('Item Updated', `Updated item "${name}"`);
                 }
             } else {
                 products.push({ id: Date.now(), name, category, unit1: isUnitOnly ? '' : 'kg', unit2, price, stockBulk, stockKg, kgPerBulk, image });
+                logUserActivity('Item Added', `Added item "${name}"`);
             }
 
             saveData();
@@ -2869,11 +3198,13 @@
         }
 
         function deleteProduct(id) {
+            const prod = products.find(p => p.id === id);
             if (verifyPermissionPassword('Delete Item')) {
                 if (confirm('Delete this item from inventory?')) {
                     products = products.filter(p => p.id !== id);
                     cart = cart.filter(i => i.id !== id);
                     saveData();
+                    logUserActivity('Item Deleted', `Deleted item "${prod ? prod.name : id}"`);
                     renderProducts();
                     renderCart();
                     renderInventoryTable();
@@ -2990,6 +3321,7 @@
             if (confirm('Clear all sales history logs?')) {
                 salesHistory = [];
                 saveData();
+                logUserActivity('Sales History Cleared', 'Cleared all sales transactions');
                 renderSalesHistory();
                 updateDashboardStats();
                 showToast('Sales history cleared', 'info');
